@@ -26,15 +26,12 @@ public class BiddingBiddingEndToEndTest extends
 	public void test_0_LoginAndActivityChange() throws Exception {
 		application.loginToServer("sniper", "sniper");
 		application.showsApplicationActivityHasChanged();
+		auction.startSellingItem();
+		application.startBiddingIn(auction);
+		auction.hasReceivedJoinRequestFrom(ApplicationRunner.SNIPER_XMPP_ID);
+		auction.announceClosed();
+		application.showsSniperHasLostAuction();
 	}
-	
-//	public void test_1_SingleJoinLostWithoutBidding() throws Exception {
-//		auction.startSellingItem();
-//		application.startBiddingIn(auction);
-//		auction.hasReceivedJoinRequestFrom(ApplicationRunner.SNIPER_XMPP_ID);
-//		auction.announceClosed();
-//		application.showsSniperHasLostAuction();
-//	}
 
 //	public void test_2_SingleJoinBidAndLost() throws Exception {
 //		auction.startSellingItem();
