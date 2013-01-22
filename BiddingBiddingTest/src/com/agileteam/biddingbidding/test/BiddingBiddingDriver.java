@@ -23,12 +23,16 @@ public class BiddingBiddingDriver {
 
 	}
 
-	public void startBidding(String id, String password) {
+	public void connectAndJoin(String id, String password) {
 		solo.enterText(0, id);
 		solo.enterText(1, password);
 		solo.clickOnButton("Join Auction");
 	}
-
+	
+	public void bid() {
+		solo.clickOnButton("Bid!");
+	}
+	
 	public void showsSniperStatus(String itemId, int lastPrice, int lastBid,
 			String status) {
 		assertTrue("status does not match.", solo.waitForText(status));
@@ -44,5 +48,7 @@ public class BiddingBiddingDriver {
 	public void showsApplicationActivityHasChanged() {
 		solo.assertCurrentActivity("login fail", MainActivity.class);
 	}
+
+
 
 }

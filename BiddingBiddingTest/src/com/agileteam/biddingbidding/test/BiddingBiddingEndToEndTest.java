@@ -25,13 +25,30 @@ public class BiddingBiddingEndToEndTest extends
 
 	public void testSingleJoinLostWithoutBidding() throws Exception {
 		auction.startSellingItem();
-		application.startBidding();
+		application.joinAuction();
 		application.showsJoined();
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 		auction.announceClosed();
 		application.showsLost();
 	}
 
+	public void testSingleJoinBiddingButLost() throws Exception {
+		auction.startSellingItem();
+		application.joinAuction();
+		application.showsJoined();
+		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
+		
+		auction.reportPrice(2000, 100, "Other bidder");
+		application.showsLosing();
+		application.bid();
+		application.showsBidding();
+		
+		auction.hasReceivedBid(2100, ApplicationRunner.BIDDER_ID);
+		
+		auction.announceClosed();
+		application.showsLost();
+	}
+	
 	@Override
 	public void tearDown() throws Exception {
 		solo.finishOpenedActivities();
