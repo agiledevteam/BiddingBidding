@@ -10,5 +10,6 @@
     <string name="joining">Joining</string>
     <string name="joined">Joined</string>
     <string name="lost">Lost</string>
+    <string name="losing">Losing</string>
 
 </resources>

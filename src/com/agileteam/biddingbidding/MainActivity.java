@@ -7,6 +7,8 @@ import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
+import com.agileteam.biddingbidding.AuctionEventListener.PriceSource;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -60,14 +62,22 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-
+	
 	private void join(String host, String id, String password) {
-		final MessageListener listener = new MessageListener() {
+		AuctionEventListener auctionEventListener = new AuctionEventListener() {
+			
 			@Override
-			public void processMessage(Chat arg0, Message arg1) {
+			public void currentPrice(int price, int increment, PriceSource priceSource) {
+				setStatus(getString(R.string.losing));
+			}
+			
+			@Override
+			public void auctionClosed() {
 				setStatus(getString(R.string.lost));
 			}
 		};
+		
+		final MessageListener listener = new AuctionMessageTranslator(id, auctionEventListener);
 
 		ConnectionConfiguration config = new ConnectionConfiguration(
 				"localhost", 5222);
