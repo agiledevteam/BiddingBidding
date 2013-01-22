@@ -4,5 +4,11 @@
     <string name="app_name">BiddingBidding</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="join_auction_button">Join Auction</string>
+    <string name="id_hint">ID</string>
+    <string name="password_hint">Password</string>
+    <string name="joining">Joining</string>
+    <string name="joined">Joined</string>
+    <string name="lost">Lost</string>
 
 </resources>

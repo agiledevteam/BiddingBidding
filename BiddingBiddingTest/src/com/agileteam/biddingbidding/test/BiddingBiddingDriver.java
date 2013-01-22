@@ -1,13 +1,10 @@
 package com.agileteam.biddingbidding.test;
 
+import static junit.framework.Assert.assertTrue;
 import android.util.Log;
 
 import com.agileteam.biddingbidding.MainActivity;
 import com.jayway.android.robotium.solo.Solo;
-
-import static junit.framework.Assert.assertTrue;
-
-
 
 public class BiddingBiddingDriver {
 
@@ -26,17 +23,16 @@ public class BiddingBiddingDriver {
 
 	}
 
-	public void startBiddingFor(String itemId) {
-		solo.enterText(0, itemId);
+	public void startBidding(String id, String password) {
+		solo.enterText(0, id);
+		solo.enterText(1, password);
 		solo.clickOnButton("Join Auction");
 	}
 
 	public void showsSniperStatus(String itemId, int lastPrice, int lastBid,
 			String status) {
-		assertTrue("status does not match.", solo.waitForText(itemId));;
-		assertTrue("status does not match.", solo.searchText(Integer.toString(lastPrice)));;
-		assertTrue("status does not match.", solo.searchText(Integer.toString(lastBid)));;
-		assertTrue("status does not match.", solo.searchText(status));;
+		assertTrue("status does not match.", solo.waitForText(status));
+		;
 	}
 
 	public void loginToserver(String bidderId, String password) {
@@ -48,7 +44,5 @@ public class BiddingBiddingDriver {
 	public void showsApplicationActivityHasChanged() {
 		solo.assertCurrentActivity("login fail", MainActivity.class);
 	}
-	
-	
 
 }
