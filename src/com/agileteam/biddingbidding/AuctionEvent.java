@@ -49,7 +49,7 @@ public class AuctionEvent {
 	}
 	
 	public PriceSource isFrom(String sniperId){
-		return sniperId.startsWith(bidder()) ? PriceSource.FromSelf : PriceSource.FromOtherBidder;
+		return sniperId.equals(bidder()) ? PriceSource.FromSelf : PriceSource.FromOtherBidder;
 	}
 	
 	private String bidder(){
