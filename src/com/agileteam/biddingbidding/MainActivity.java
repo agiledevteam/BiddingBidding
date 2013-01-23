@@ -111,17 +111,17 @@ public class MainActivity extends Activity implements AuctionEventListener {
 		XMPPConnection connection = new XMPPConnection(config);
 		try {
 			connection.connect();
-			connection.login(makeXMPPID(host, id), password);
+			connection.login(makeXMPPID(id), password);
 			MainActivity.this.chat = connection.getChatManager().createChat(
-					makeXMPPID(host, AUCTION_ITEM_ID), listener);
+					makeXMPPID(AUCTION_ITEM_ID), listener);
 			chat.sendMessage(JOIN_COMMAND_FORMAT);
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private String makeXMPPID(String host, String id) {
-		return id + "@" + host;
+	private String makeXMPPID(String id) {
+		return id + "@localhost";
 	}
 
 	public void setStatus(final String string) {
