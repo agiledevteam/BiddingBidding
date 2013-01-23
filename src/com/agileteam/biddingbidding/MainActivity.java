@@ -58,7 +58,7 @@ public class MainActivity extends Activity implements AuctionEventListener {
 	}
 
 	private String host() {
-		return "localhost";
+		return getStringFrom(R.id.editText_host);
 	}
 
 	private String id() {
@@ -66,7 +66,7 @@ public class MainActivity extends Activity implements AuctionEventListener {
 	}
 
 	private String password() {
-		return getStringFrom(R.id.editText_id);
+		return getStringFrom(R.id.editText_password);
 	}
 
 	private String getStringFrom(int resId) {

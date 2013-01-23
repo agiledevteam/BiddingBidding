@@ -14,19 +14,6 @@
         android:layout_alignParentTop="true"
         android:text="@string/join_auction_button" />
 
-    <EditText
-        android:id="@+id/editText_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/button_join_auction"
-        android:ems="10"
-        android:hint="@string/id_hint" >
-
-        <requestFocus />
-    </EditText>
-
     <TextView
         android:id="@+id/textView_status"
         android:layout_width="wrap_content"
@@ -39,17 +26,6 @@
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/editText_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText_id"
-        android:layout_toLeftOf="@+id/button_join_auction"
-        android:ems="10"
-        android:hint="@string/password_hint"
-        android:inputType="textPassword" />
-
     <Button
         android:id="@+id/button_bid"
         android:layout_width="wrap_content"
@@ -58,5 +34,42 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:text="@string/bid_button" />
+
+    <EditText
+        android:id="@+id/editText_host"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/button_join_auction"
+        android:ems="10"
+        android:hint="@string/host_hint" >
+
+        <requestFocus />
+        <requestFocus />
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/editText_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editText_host"
+        android:layout_toLeftOf="@+id/button_join_auction"
+        android:ems="10"
+        android:hint="@string/id_hint" >
+    </EditText>
+
+    <EditText
+        android:id="@+id/editText_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/editText_host"
+        android:layout_below="@+id/editText_id"
+        android:ems="10"
+        android:hint="@string/password_hint"
+        android:inputType="textPassword" />
 
 </RelativeLayout>

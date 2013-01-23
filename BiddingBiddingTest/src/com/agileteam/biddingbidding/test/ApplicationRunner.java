@@ -3,6 +3,7 @@ package com.agileteam.biddingbidding.test;
 import com.jayway.android.robotium.solo.Solo;
 
 public class ApplicationRunner {
+	private static final String AUCTION_HOST = "localhost";
 	public static final String BIDDER_ID = "sniper";
 	public static final String BIDDER_PASSWORD = "sniper";
 	private static final String STATUS_JOINED = "Joined";
@@ -18,7 +19,7 @@ public class ApplicationRunner {
 	}
 
 	public void joinAuction() {
-		driver.connectAndJoin(BIDDER_ID, BIDDER_PASSWORD);
+		driver.connectAndJoin(AUCTION_HOST, BIDDER_ID, BIDDER_PASSWORD);
 	}
 
 	public void bid() {
@@ -41,7 +42,7 @@ public class ApplicationRunner {
 		driver.showsSniperStatus(STATUS_BIDDING);
 	}
 
-	public void showWinning() {
+	public void showsWinning() {
 		driver.showsSniperStatus(STATUS_WINNING);
 	}
 

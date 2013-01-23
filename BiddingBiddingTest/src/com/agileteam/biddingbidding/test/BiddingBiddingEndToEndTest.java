@@ -1,7 +1,5 @@
 package com.agileteam.biddingbidding.test;
 
-import org.jivesoftware.smack.XMPPException;
-
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.agileteam.biddingbidding.MainActivity;
@@ -64,7 +62,7 @@ public class BiddingBiddingEndToEndTest extends
 
 		auction.hasReceivedBid(2100, ApplicationRunner.BIDDER_ID);
 		auction.reportPrice(2100, 100, ApplicationRunner.BIDDER_ID);
-		application.showWinning();
+		application.showsWinning();
 
 		auction.announceClosed();
 		application.showsWon();
