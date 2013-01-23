@@ -24,6 +24,7 @@ public class MainActivity extends Activity implements AuctionEventListener {
 	private TextView textViewStatus;
 	private int price;
 	private int increment;
+	private boolean winning;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,8 @@ public class MainActivity extends Activity implements AuctionEventListener {
 
 	protected void bid() {
 		try {
-			chat.sendMessage(String.format(BID_COMMAND_FORMAT, price + increment));
+			chat.sendMessage(String.format(BID_COMMAND_FORMAT, price
+					+ increment));
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
@@ -82,12 +84,21 @@ public class MainActivity extends Activity implements AuctionEventListener {
 	public void currentPrice(int price, int increment, PriceSource priceSource) {
 		this.price = price;
 		this.increment = increment;
-		setStatus(getString(R.string.losing));
+		this.winning = priceSource == PriceSource.FromSelf;
+		if (winning) {
+			setStatus(getString(R.string.winning));
+		} else {
+			setStatus(getString(R.string.losing));
+		}
 	}
 
 	@Override
 	public void auctionClosed() {
-		setStatus(getString(R.string.lost));
+		if (winning) {
+			setStatus(getString(R.string.won));
+		} else {
+			setStatus(getString(R.string.lost));
+		}
 	}
 
 	private void join(String host, String id, String password) {

@@ -13,5 +13,7 @@
     <string name="losing">Losing</string>
     <string name="bid_button">Bid!</string>
     <string name="bidding">Bidding</string>
+    <string name="winning">Winning</string>
+    <string name="won">Won</string>
 
 </resources>

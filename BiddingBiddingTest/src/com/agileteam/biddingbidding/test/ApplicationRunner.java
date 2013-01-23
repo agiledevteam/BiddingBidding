@@ -6,9 +6,11 @@ public class ApplicationRunner {
 	public static final String BIDDER_ID = "sniper";
 	public static final String BIDDER_PASSWORD = "sniper";
 	private static final String STATUS_JOINED = "Joined";
-	private static final String STATUS_LOSING = "Losing"; 
-	private static final String STATUS_BIDDING = "Bidding"; 
+	private static final String STATUS_LOSING = "Losing";
+	private static final String STATUS_BIDDING = "Bidding";
+	private static final String STATUS_WINNING = "Winning";
 	private static final String STATUS_LOST = "Lost";
+	private static final String STATUS_WON = "Won";
 	private BiddingBiddingDriver driver;
 
 	public ApplicationRunner(Solo solo) {
@@ -39,14 +41,18 @@ public class ApplicationRunner {
 		driver.showsSniperStatus(STATUS_BIDDING);
 	}
 
+	public void showWinning() {
+		driver.showsSniperStatus(STATUS_WINNING);
+	}
+
+	public void showsWon() {
+		driver.showsSniperStatus(STATUS_WON);
+	}
 
 	public void stop() {
 		if (driver != null) {
 			driver.dispose();
 		}
 	}
-
-
-
 
 }
