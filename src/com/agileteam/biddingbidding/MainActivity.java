@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
 		final MessageListener listener = new AuctionMessageTranslator(id, auctionEventListener);
 
 		ConnectionConfiguration config = new ConnectionConfiguration(
-				"localhost", 5222);
+				host, 5222);
 		XMPPConnection connection = new XMPPConnection(config);
 		try {
 			connection.connect();

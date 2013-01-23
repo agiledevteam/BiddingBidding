@@ -12,7 +12,7 @@ public class ApplicationRunner {
 	private BiddingBiddingDriver driver;
 
 	public ApplicationRunner(Solo solo) {
-		driver = new BiddingBiddingDriver(solo);
+		driver = new BiddingBiddingDriver(solo, 2000);
 	}
 
 	public void joinAuction() {

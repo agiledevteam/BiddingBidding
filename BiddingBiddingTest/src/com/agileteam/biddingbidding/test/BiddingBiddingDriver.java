@@ -1,22 +1,22 @@
 package com.agileteam.biddingbidding.test;
 
-import static junit.framework.Assert.assertTrue;
-import android.util.Log;
+import android.app.Activity;
+import android.widget.TextView;
 
 import com.agileteam.biddingbidding.MainActivity;
+import com.agileteam.biddingbidding.R;
 import com.jayway.android.robotium.solo.Solo;
+import com.objogate.wl.android.driver.AndroidDriver;
 
-public class BiddingBiddingDriver {
+public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 
-	private Solo solo;
-
-	public BiddingBiddingDriver(Solo solo) {
-		this.solo = solo;
+	public BiddingBiddingDriver(Solo solo, int timeout) {
+		super(solo, timeout);
 	}
 
 	public void showsSniperStatus(String status) {
-		assertTrue("status does not match.", solo.waitForText(status, 1, 5000));
-		Log.d("yskang", "Fake server receive message: " + status);
+		//assertTrue("status does not match.", solo.waitForText(status, 1, 5000));
+		new AndroidDriver<TextView>(this, R.id.textView_status).is(containsAllStrings(status));
 	}
 
 	public void dispose() {
@@ -31,12 +31,6 @@ public class BiddingBiddingDriver {
 	
 	public void bid() {
 		solo.clickOnButton("Bid!");
-	}
-	
-	public void showsSniperStatus(String itemId, int lastPrice, int lastBid,
-			String status) {
-		assertTrue("status does not match.", solo.waitForText(status));
-		;
 	}
 
 	public void loginToserver(String bidderId, String password) {

@@ -31,7 +31,7 @@
         android:id="@+id/textView_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/button_bid"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/button_join_auction"
@@ -49,5 +49,14 @@
         android:ems="10"
         android:hint="@string/password_hint"
         android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/button_bid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/bid_button" />
 
 </RelativeLayout>

@@ -11,5 +11,6 @@
     <string name="joined">Joined</string>
     <string name="lost">Lost</string>
     <string name="losing">Losing</string>
+    <string name="bid_button">Bid!</string>
 
 </resources>
