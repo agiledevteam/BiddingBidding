@@ -14,8 +14,9 @@ public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 	}
 
 	public void showsSniperStatus(String status, int currentPrice, int nextPrice) {
-		new AndroidDriver<View>(this, R.id.status)
-				.is(containsAllStrings(status));
+		new AndroidDriver<View>(this, R.id.status).is(containsAllStrings(
+				status, Integer.toString(currentPrice),
+				Integer.toString(nextPrice)));
 	}
 
 	public void dispose() {

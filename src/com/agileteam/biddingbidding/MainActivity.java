@@ -9,6 +9,7 @@ import org.jivesoftware.smack.XMPPException;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,8 +23,10 @@ public class MainActivity extends Activity implements AuctionEventListener {
 	private static final String AUCTION_ITEM_ID = "auction-item-54321";
 	protected Chat chat;
 	private TextView textViewStatus;
-	private int price;
-	private int increment;
+	private TextView textViewCurrentPrice;
+	private TextView textViewNextPrice;
+	private int currentPrice;
+	private int nextPrice;
 	private boolean winning;
 
 	@Override
@@ -31,6 +34,8 @@ public class MainActivity extends Activity implements AuctionEventListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		textViewStatus = (TextView) findViewById(R.id.textView_status);
+		textViewCurrentPrice = (TextView) findViewById(R.id.textView_currentPrice);
+		textViewNextPrice = (TextView) findViewById(R.id.textView_nextPrice);
 		final Button joinButton = (Button) findViewById(R.id.button_join_auction);
 		joinButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -49,8 +54,7 @@ public class MainActivity extends Activity implements AuctionEventListener {
 
 	protected void bid() {
 		try {
-			chat.sendMessage(String.format(BID_COMMAND_FORMAT, price
-					+ increment));
+			chat.sendMessage(String.format(BID_COMMAND_FORMAT, nextPrice));
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
@@ -82,8 +86,8 @@ public class MainActivity extends Activity implements AuctionEventListener {
 
 	@Override
 	public void currentPrice(int price, int increment, PriceSource priceSource) {
-		this.price = price;
-		this.increment = increment;
+		this.currentPrice = price;
+		this.nextPrice = price + increment;
 		this.winning = priceSource == PriceSource.FromSelf;
 		if (winning) {
 			setStatus(getString(R.string.winning));
@@ -120,8 +124,17 @@ public class MainActivity extends Activity implements AuctionEventListener {
 		return id + "@" + host;
 	}
 
-	public void setStatus(String string) {
-		textViewStatus.setText(string);
+	public void setStatus(final String string) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				textViewStatus.setText(string);
+				textViewCurrentPrice.setText(Integer.toString(currentPrice));
+				textViewNextPrice.setText(Integer.toString(nextPrice));
+				Log.d("han", String.format("setStatus(%s, %d, %d)", string,
+						currentPrice, nextPrice));
+			}
+		});
 	}
 
 	class JoinTask extends AsyncTask<String, Void, Void> {
