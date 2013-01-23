@@ -16,12 +16,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements AuctionEventListener {
 	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
 	public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 	private static final String AUCTION_ITEM_ID = "auction-item-54321";
 	protected Chat chat;
 	private TextView textViewStatus;
+	private int price;
+	private int increment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class MainActivity extends Activity {
 
 	protected void bid() {
 		try {
-			chat.sendMessage(String.format(BID_COMMAND_FORMAT, 2100));
+			chat.sendMessage(String.format(BID_COMMAND_FORMAT, price + increment));
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
@@ -76,24 +78,20 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	@Override
+	public void currentPrice(int price, int increment, PriceSource priceSource) {
+		this.price = price;
+		this.increment = increment;
+		setStatus(getString(R.string.losing));
+	}
+
+	@Override
+	public void auctionClosed() {
+		setStatus(getString(R.string.lost));
+	}
+
 	private void join(String host, String id, String password) {
-		AuctionEventListener auctionEventListener = new AuctionEventListener() {
-
-			@Override
-			public void currentPrice(int price, int increment,
-					PriceSource priceSource) {
-				setStatus(getString(R.string.losing));
-			}
-
-			@Override
-			public void auctionClosed() {
-				setStatus(getString(R.string.lost));
-			}
-		};
-
-		final MessageListener listener = new AuctionMessageTranslator(id,
-				auctionEventListener);
-
+		final MessageListener listener = new AuctionMessageTranslator(id, this);
 		ConnectionConfiguration config = new ConnectionConfiguration(host, 5222);
 		XMPPConnection connection = new XMPPConnection(config);
 		try {
