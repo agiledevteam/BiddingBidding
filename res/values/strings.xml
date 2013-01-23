@@ -12,5 +12,6 @@
     <string name="lost">Lost</string>
     <string name="losing">Losing</string>
     <string name="bid_button">Bid!</string>
+    <string name="bidding">Bidding</string>
 
 </resources>

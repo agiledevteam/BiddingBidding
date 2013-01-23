@@ -5,9 +5,6 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.Message;
-
-import com.agileteam.biddingbidding.AuctionEventListener.PriceSource;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -38,6 +35,22 @@ public class MainActivity extends Activity {
 				new JoinTask().execute(host(), id(), password());
 			}
 		});
+		final Button bidButton = (Button) findViewById(R.id.button_bid);
+		bidButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				bid();
+			}
+		});
+	}
+
+	protected void bid() {
+		try {
+			chat.sendMessage(String.format(BID_COMMAND_FORMAT, 2100));
+		} catch (XMPPException e) {
+			e.printStackTrace();
+		}
+		setStatus(getString(R.string.bidding));
 	}
 
 	private String host() {
@@ -62,25 +75,26 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-	
+
 	private void join(String host, String id, String password) {
 		AuctionEventListener auctionEventListener = new AuctionEventListener() {
-			
+
 			@Override
-			public void currentPrice(int price, int increment, PriceSource priceSource) {
+			public void currentPrice(int price, int increment,
+					PriceSource priceSource) {
 				setStatus(getString(R.string.losing));
 			}
-			
+
 			@Override
 			public void auctionClosed() {
 				setStatus(getString(R.string.lost));
 			}
 		};
-		
-		final MessageListener listener = new AuctionMessageTranslator(id, auctionEventListener);
 
-		ConnectionConfiguration config = new ConnectionConfiguration(
-				host, 5222);
+		final MessageListener listener = new AuctionMessageTranslator(id,
+				auctionEventListener);
+
+		ConnectionConfiguration config = new ConnectionConfiguration(host, 5222);
 		XMPPConnection connection = new XMPPConnection(config);
 		try {
 			connection.connect();
