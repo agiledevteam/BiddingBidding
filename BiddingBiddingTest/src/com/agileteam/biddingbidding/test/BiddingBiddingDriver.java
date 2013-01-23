@@ -1,7 +1,7 @@
 package com.agileteam.biddingbidding.test;
 
 import android.app.Activity;
-import android.widget.TextView;
+import android.view.View;
 
 import com.agileteam.biddingbidding.R;
 import com.jayway.android.robotium.solo.Solo;
@@ -13,8 +13,8 @@ public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 		super(solo, timeout);
 	}
 
-	public void showsSniperStatus(String status) {
-		new AndroidDriver<TextView>(this, R.id.textView_status)
+	public void showsSniperStatus(String status, int currentPrice, int nextPrice) {
+		new AndroidDriver<View>(this, R.id.status)
 				.is(containsAllStrings(status));
 	}
 

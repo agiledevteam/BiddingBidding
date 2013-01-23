@@ -29,7 +29,7 @@ public class BiddingBiddingEndToEndTest extends
 		application.showsJoined();
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 		auction.announceClosed();
-		application.showsLost();
+		application.showsLost(0, 0);
 	}
 
 	public void testSingleJoinBiddingButLost() throws Exception {
@@ -39,14 +39,14 @@ public class BiddingBiddingEndToEndTest extends
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 
 		auction.reportPrice(2000, 100, "Other bidder");
-		application.showsLosing();
+		application.showsLosing(2000, 2100);
 		application.bid();
-		application.showsBidding();
+		application.showsBidding(2100, 2100);
 
 		auction.hasReceivedBid(2100, ApplicationRunner.BIDDER_ID);
 
 		auction.announceClosed();
-		application.showsLost();
+		application.showsLost(2100, 2100);
 	}
 
 	public void testSingleJoinBiddingWinningWon() throws Exception {
@@ -56,16 +56,16 @@ public class BiddingBiddingEndToEndTest extends
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 
 		auction.reportPrice(2000, 100, "Other bidder");
-		application.showsLosing();
+		application.showsLosing(2000, 2100);
 		application.bid();
-		application.showsBidding();
+		application.showsBidding(2100, 2100);
 
 		auction.hasReceivedBid(2100, ApplicationRunner.BIDDER_ID);
 		auction.reportPrice(2100, 100, ApplicationRunner.BIDDER_ID);
-		application.showsWinning();
+		application.showsWinning(2100, 2200);
 
 		auction.announceClosed();
-		application.showsWon();
+		application.showsWon(2100, 2200);
 	}
 
 	@Override

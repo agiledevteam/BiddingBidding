@@ -14,27 +14,6 @@
         android:layout_alignParentTop="true"
         android:text="@string/join_auction_button" />
 
-    <TextView
-        android:id="@+id/textView_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button_bid"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/button_join_auction"
-        android:gravity="center"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <Button
-        android:id="@+id/button_bid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="@string/bid_button" />
-
     <EditText
         android:id="@+id/editText_host"
         android:layout_width="wrap_content"
@@ -46,8 +25,8 @@
         android:hint="@string/host_hint" >
 
         <requestFocus />
-        <requestFocus />
 
+        <requestFocus />
     </EditText>
 
     <EditText
@@ -71,5 +50,42 @@
         android:ems="10"
         android:hint="@string/password_hint"
         android:inputType="textPassword" />
+
+    <LinearLayout
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/button_join_auction"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/textView_currentPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Small Text"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/textView_nextPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Small Text"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <Button
+            android:id="@+id/button_bid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bid_button" />
+
+    </LinearLayout>
+
 
 </RelativeLayout>
