@@ -22,6 +22,7 @@ public class MainActivity extends Activity implements AuctionEventListener {
 	public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 	private static final String AUCTION_ITEM_ID = "auction-item-54321";
 	protected Chat chat;
+	private Button buttonBid;
 	private TextView textViewStatus;
 	private TextView textViewCurrentPrice;
 	private TextView textViewNextPrice;
@@ -33,6 +34,7 @@ public class MainActivity extends Activity implements AuctionEventListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		buttonBid = (Button)findViewById(R.id.button_bid);
 		textViewStatus = (TextView) findViewById(R.id.textView_status);
 		textViewCurrentPrice = (TextView) findViewById(R.id.textView_currentPrice);
 		textViewNextPrice = (TextView) findViewById(R.id.textView_nextPrice);
@@ -90,22 +92,14 @@ public class MainActivity extends Activity implements AuctionEventListener {
 		this.nextPrice = price + increment;
 		this.winning = priceSource == PriceSource.FromSelf;
 		if (winning) {
-			enableBid(false);
 			setStatus(getString(R.string.winning));
 		} else {
-			enableBid(true);
 			setStatus(getString(R.string.losing));
 		}
 	}
 
-	private void enableBid(boolean b) {
-		((Button) findViewById(R.id.button_bid)).setClickable(b);
-	}
-
 	@Override
 	public void auctionClosed() {
-		enableBid(false);
-
 		if (winning) {
 			setStatus(getString(R.string.won));
 		} else {
@@ -141,6 +135,7 @@ public class MainActivity extends Activity implements AuctionEventListener {
 				textViewNextPrice.setText(Integer.toString(nextPrice));
 				Log.d("han", String.format("setStatus(%s, %d, %d)", string,
 						currentPrice, nextPrice));
+				buttonBid.setEnabled(getString(R.string.losing).equals(string));
 			}
 		});
 	}
