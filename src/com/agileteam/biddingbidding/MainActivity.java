@@ -90,14 +90,22 @@ public class MainActivity extends Activity implements AuctionEventListener {
 		this.nextPrice = price + increment;
 		this.winning = priceSource == PriceSource.FromSelf;
 		if (winning) {
+			enableBid(false);
 			setStatus(getString(R.string.winning));
 		} else {
+			enableBid(true);
 			setStatus(getString(R.string.losing));
 		}
 	}
 
+	private void enableBid(boolean b) {
+		((Button) findViewById(R.id.button_bid)).setClickable(b);
+	}
+
 	@Override
 	public void auctionClosed() {
+		enableBid(false);
+
 		if (winning) {
 			setStatus(getString(R.string.won));
 		} else {
