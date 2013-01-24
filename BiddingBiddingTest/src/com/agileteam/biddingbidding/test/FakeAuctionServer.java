@@ -12,6 +12,7 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.agileteam.biddingbidding.MainActivity;
@@ -19,6 +20,7 @@ import com.agileteam.biddingbidding.MainActivity;
 public class FakeAuctionServer {
 	private SingleMessageListener messageListener = new SingleMessageListener();
 
+	public static final String SERVER_IP_ADDRESS;
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
 	public static final String AUCTION_RESOURCE = "Auction";
 	public static final String XMPP_HOSTNAME = "localhost";
@@ -27,11 +29,18 @@ public class FakeAuctionServer {
 	private final XMPPConnection connection;
 	private Chat currentChat;
 
+	static {
+		if ("google_sdk".equals(Build.PRODUCT))
+			SERVER_IP_ADDRESS = "10.177.240.223";
+		else
+			SERVER_IP_ADDRESS = "localhost";
+	}
+	
 	public FakeAuctionServer(String itemId) {
 		Log.d("yskang", "Fake server create : " + itemId);
 		this.itemId = itemId;
 		ConnectionConfiguration connConfig = new ConnectionConfiguration(
-				"localhost", 5222, "localhost");
+				SERVER_IP_ADDRESS, 5222, "localhost");
 		this.connection = new XMPPConnection(connConfig);
 	}
 
