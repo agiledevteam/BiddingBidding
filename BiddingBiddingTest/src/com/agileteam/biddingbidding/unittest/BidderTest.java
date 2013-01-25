@@ -64,4 +64,43 @@ public class BidderTest extends TestCase {
 		bidder.bid(); // button click
 		assertBidder(bidder, 110, 110, BidderState.BIDDING);
 	}
+	
+	public void testBidderBecomesLostWhenReceiveClosed(){
+		context.checking(new Expectations() {
+			{
+				atLeast(1).of(listener).bidderStateChanged(bidder);
+			}
+		});
+		bidder.currentPrice(100, 10, PriceSource.FromOtherBidder);
+		assertBidder(bidder, 100, 110, BidderState.LOSING);
+		bidder.auctionClosed();
+		assertBidder(bidder, 100, 110, BidderState.LOST);
+	}
+	
+	public void testBidderBecomesWonWhenReceiveClosed(){
+		context.checking(new Expectations() {
+			{
+				atLeast(1).of(listener).bidderStateChanged(bidder);
+			}
+		});
+		bidder.currentPrice(100, 10, PriceSource.FromSelf);
+		assertBidder(bidder, 100, 110, BidderState.WINNING);
+		bidder.auctionClosed();
+		assertBidder(bidder, 100, 110, BidderState.WON);
+	}
+	
+	public void testBidderBecomesLostWhenReceiveClosedWhileBidding(){
+		context.checking(new Expectations() {
+			{
+				atLeast(1).of(listener).bidderStateChanged(bidder);
+				oneOf(auction).bid(110);
+			}
+		});
+		bidder.currentPrice(100, 10, PriceSource.FromOtherBidder);
+		assertBidder(bidder, 100, 110, BidderState.LOSING);
+		bidder.bid();
+		assertBidder(bidder, 110, 110, BidderState.BIDDING);
+		bidder.auctionClosed();
+		assertBidder(bidder, 110, 110, BidderState.LOST);
+	}
 }

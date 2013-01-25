@@ -15,8 +15,13 @@ public class Bidder implements AuctionEventListener {
 
 	@Override
 	public void auctionClosed() {
-		// TODO Auto-generated method stub
-
+		if(state == BidderState.WINNING ){
+			state = BidderState.WON;
+		}else if(state == BidderState.LOSING){
+			state = BidderState.LOST;
+		}else if(state == BidderState.BIDDING){
+			state = BidderState.LOST;
+		}
 	}
 
 	@Override
@@ -44,8 +49,9 @@ public class Bidder implements AuctionEventListener {
 	}
 
 	public void bid() {
-		// TODO Auto-generated method stub
-
+		currentPrice = nextPrice;
+		state = BidderState.BIDDING;
+		auction.bid(nextPrice);
 	}
 
 }
