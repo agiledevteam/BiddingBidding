@@ -21,7 +21,12 @@ public class Bidder implements AuctionEventListener {
 			state = BidderState.LOST;
 		}else if(state == BidderState.BIDDING){
 			state = BidderState.LOST;
+		}else if(state == BidderState.JOINED){
+			state = BidderState.LOST;
+		}else {
+			throw new RuntimeException("Defect - Wrong BidderState");
 		}
+		listener.bidderStateChanged(this);
 	}
 
 	@Override
@@ -52,6 +57,7 @@ public class Bidder implements AuctionEventListener {
 		currentPrice = nextPrice;
 		state = BidderState.BIDDING;
 		auction.bid(nextPrice);
+		listener.bidderStateChanged(this);
 	}
 
 }
