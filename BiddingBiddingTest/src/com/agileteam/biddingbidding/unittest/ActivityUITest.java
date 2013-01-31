@@ -10,19 +10,20 @@ import com.jayway.android.robotium.solo.Solo;
 public class ActivityUITest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
 	FakeAuctionServer auction = new FakeAuctionServer("item-54321");
+	private Solo solo;
 
 	public ActivityUITest() {
 		super(MainActivity.class);
+	}
+	@Override
+	public void setUp() {
+		solo = new Solo(getInstrumentation(), getActivity());
 	}
 
 	public void testBidButtonInactiveWhenStateIsNotLosing() throws Exception {
 		auction.startSellingItem();
 
-		Solo solo = new Solo(getInstrumentation(), getActivity());
-		solo.enterText(0, FakeAuctionServer.SERVER_IP_ADDRESS);
-		solo.enterText(1, "sniper");
-		solo.enterText(2, "sniper");
-		solo.clickOnButton("Join Auction");
+		soloJoin(FakeAuctionServer.SERVER_IP_ADDRESS, "sniper", "sniper");
 
 		assertFalse(solo.getButton("Bid!").isEnabled());
 
@@ -40,11 +41,7 @@ public class ActivityUITest extends
 	public void testBidButtonActiveWhenLosing() throws Exception {
 		auction.startSellingItem();
 
-		Solo solo = new Solo(getInstrumentation(), getActivity());
-		solo.enterText(0, FakeAuctionServer.SERVER_IP_ADDRESS);
-		solo.enterText(1, "sniper");
-		solo.enterText(2, "sniper");
-		solo.clickOnButton("Join Auction");
+		soloJoin(FakeAuctionServer.SERVER_IP_ADDRESS, "sniper", "sniper");
 
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 		auction.reportPrice(2000, 100, "JYP");
@@ -55,11 +52,7 @@ public class ActivityUITest extends
 	public void testKeepBidButtonActiveWhenDeviceRotate() throws Exception {
 		auction.startSellingItem();
 
-		Solo solo = new Solo(getInstrumentation(), getActivity());
-		solo.enterText(0, FakeAuctionServer.SERVER_IP_ADDRESS);
-		solo.enterText(1, "sniper");
-		solo.enterText(2, "sniper");
-		solo.clickOnButton("Join Auction");
+		soloJoin(FakeAuctionServer.SERVER_IP_ADDRESS, "sniper", "sniper");
 
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 		auction.reportPrice(2000, 100, "JYP");
@@ -70,5 +63,18 @@ public class ActivityUITest extends
 		solo.setActivityOrientation(Solo.PORTRAIT);
 
 		assertTrue(solo.getButton("Bid!").isEnabled());
+	}
+	
+	private void soloJoin(String server, String bidderId, String password) {
+		solo.enterText(0, server);
+		solo.enterText(1, bidderId);
+		solo.enterText(2, password);
+		solo.clickOnButton("Join Auction");
+	}
+	
+	@Override
+	public void tearDown() {
+		auction.stop();
+		solo.finishOpenedActivities();
 	}
 }
