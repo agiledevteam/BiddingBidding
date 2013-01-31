@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,7 +27,7 @@ public class MainActivity extends Activity {
 	private TextView textViewCurrentPrice;
 	private TextView textViewNextPrice;
 
-	private Bidder bidder;
+	private Bidder bidder = new Bidder(null, null);
 
 	public class XMPPAuction implements Auction {
 
@@ -49,18 +50,22 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
 		buttonBid = (Button) findViewById(R.id.button_bid);
 		textViewStatus = (TextView) findViewById(R.id.textView_status);
 		textViewCurrentPrice = (TextView) findViewById(R.id.textView_currentPrice);
 		textViewNextPrice = (TextView) findViewById(R.id.textView_nextPrice);
 		final Button joinButton = (Button) findViewById(R.id.button_join_auction);
+		setProgressBarIndeterminateVisibility(false);
+		
 		joinButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				new JoinTask().execute(host(), id(), password());
 			}
 		});
+
 		final Button bidButton = (Button) findViewById(R.id.button_bid);
 		bidButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -153,14 +158,23 @@ public class MainActivity extends Activity {
 				Log.d("han", String.format("setStatus(%s, %d, %d)", string,
 						bidder.getCurrentPrice(), bidder.getNextPrice()));
 				buttonBid.setEnabled(getString(R.string.losing).equals(string));
+				setProgressCircle(bidder);
 			}
 		});
 	}
 
+	private void setProgressCircle(Bidder bidder) {
+		if((bidder.getState() == BidderState.BIDDING) || (bidder.getState() == BidderState.JOINING)){
+			setProgressBarIndeterminateVisibility(true);
+		}else{
+			setProgressBarIndeterminateVisibility(false);
+		}
+	}
+	
 	class JoinTask extends AsyncTask<String, Void, Void> {
 		@Override
 		protected void onPreExecute() {
-			textViewStatus.setText(getString(R.string.joining));
+			setStatus(getString(R.string.joining), bidder);
 		}
 
 		@Override
@@ -171,7 +185,7 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(Void result) {
-			setStatus(getString(R.string.joined), bidder);
+			bidder.setState(BidderState.JOINED);
 		}
 	}
 

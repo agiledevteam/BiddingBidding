@@ -29,8 +29,8 @@ public class BidderTest extends TestCase {
 		assertEquals(state, bidder.getState());
 	}
 
-	public void testBidderIsInitializedWithJoinedStateAndZeroPrice() {
-		assertBidder(bidder, 0, 0, BidderState.JOINED);
+	public void testBidderIsInitializedWithJoiningStateAndZeroPrice() {
+		assertBidder(bidder, 0, 0, BidderState.JOINING);
 	}
 
 	public void testBidderNotifiesLosingWhenReceivedCurrentPriceFromOtherBidder() {

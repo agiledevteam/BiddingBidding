@@ -6,7 +6,7 @@ public class Bidder implements AuctionEventListener {
 	private BidderListener listener;
 	private int currentPrice;
 	private int nextPrice;
-	private BidderState state = BidderState.JOINED;
+	private BidderState state = BidderState.JOINING;
 
 	public Bidder(BidderListener listener, Auction auction) {
 		this.listener = listener;
@@ -49,6 +49,11 @@ public class Bidder implements AuctionEventListener {
 		return nextPrice;
 	}
 
+	public void setState(BidderState state){
+		this.state = state; 
+		listener.bidderStateChanged(this);
+	}
+	
 	public BidderState getState() {
 		return state;
 	}
