@@ -1,61 +1,59 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_base"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:animateLayoutChanges="true"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/button_join_auction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/editText_password"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/join_auction_button" />
+    <LinearLayout
+        android:id="@+id/layout_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <EditText
-        android:id="@+id/editText_host"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/button_join_auction"
-        android:ems="10"
-        android:hint="@string/host_hint" >
+        <LinearLayout
+            android:layout_width="233dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.94"
+            android:orientation="vertical" >
 
-        <requestFocus />
+            <EditText
+                android:id="@+id/editText_host"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/host_hint" />
 
-        <requestFocus />
-    </EditText>
+            <EditText
+                android:id="@+id/editText_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/id_hint" />
 
-    <EditText
-        android:id="@+id/editText_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText_host"
-        android:layout_toLeftOf="@+id/button_join_auction"
-        android:ems="10"
-        android:hint="@string/id_hint" >
-    </EditText>
+            <EditText
+                android:id="@+id/editText_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword" />
+        </LinearLayout>
 
-    <EditText
-        android:id="@+id/editText_password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/editText_host"
-        android:layout_below="@+id/editText_id"
-        android:ems="10"
-        android:hint="@string/password_hint"
-        android:inputType="textPassword" />
+        <Button
+            android:id="@+id/button_join_auction"
+            android:layout_width="103dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.43"
+            android:text="@string/join_auction_button" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/button_join_auction"
         android:orientation="vertical" >
 
         <TextView
@@ -85,5 +83,4 @@
 
     </LinearLayout>
 
-
-</RelativeLayout>
+</LinearLayout>

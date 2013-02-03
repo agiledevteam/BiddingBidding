@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,8 @@ public class MainActivity extends Activity {
 	private TextView textViewStatus;
 	private TextView textViewCurrentPrice;
 	private TextView textViewNextPrice;
+	private ViewGroup baseLayoutView;
+	private View loginView;
 
 	private Bidder bidder = new Bidder(null, null);
 
@@ -52,6 +55,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
+		
+		baseLayoutView = (ViewGroup)findViewById(R.id.layout_base);
+		loginView = (View)findViewById(R.id.layout_login);
+		
 		buttonBid = (Button) findViewById(R.id.button_bid);
 		textViewStatus = (TextView) findViewById(R.id.textView_status);
 		textViewCurrentPrice = (TextView) findViewById(R.id.textView_currentPrice);
@@ -175,6 +182,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPreExecute() {
 			setStatus(getString(R.string.joining), bidder);
+			baseLayoutView.removeView(loginView);
 		}
 
 		@Override
