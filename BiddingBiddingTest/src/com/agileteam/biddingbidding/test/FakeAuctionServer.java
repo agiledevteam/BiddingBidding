@@ -48,7 +48,7 @@ public class FakeAuctionServer {
 		connection.connect();
 		Log.d("yskang", "Fake server connect complete : " + itemId);
 		connection.login(String.format(ITEM_ID_AS_LOGIN, itemId),
-				AUCTION_PASSWORD, AUCTION_RESOURCE);
+				AUCTION_PASSWORD);
 		Log.d("yskang", "Fake server login complete : " + itemId);
 		connection.getChatManager().addChatListener(new ChatManagerListener() {
 			public void chatCreated(Chat chat, boolean createdLocally) {
@@ -64,7 +64,8 @@ public class FakeAuctionServer {
 	}
 
 	public void stop() {
-		connection.disconnect();
+		// TODO disconnect hangs but if UI button clicked, it runs successfully
+		// connection.disconnect();
 	}
 
 	public void reportPrice(int price, int increment, String bidder)

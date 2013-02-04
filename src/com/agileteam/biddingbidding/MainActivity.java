@@ -30,7 +30,36 @@ public class MainActivity extends Activity {
 	private ViewGroup baseLayoutView;
 	private View loginView;
 
-	private Bidder bidder = new Bidder(null, null);
+	private Bidder bidder = null;
+
+	private class BidderDisplayer implements BidderListener {
+		@Override
+		public void bidderStateChanged(Bidder bidder) {
+			switch (bidder.getState()) {
+			case LOSING:
+				setStatus(getString(R.string.losing), bidder);
+				break;
+			case JOINED:
+				setStatus(getString(R.string.joined), bidder);
+				break;
+			case BIDDING:
+				setStatus(getString(R.string.bidding), bidder);
+				break;
+			case WINNING:
+				setStatus(getString(R.string.winning), bidder);
+				break;
+			case WON:
+				setStatus(getString(R.string.won), bidder);
+				break;
+			case LOST:
+				setStatus(getString(R.string.lost), bidder);
+				break;
+			default:
+				throw new RuntimeException(
+						"Defects - wrong BidderState");
+			}
+		}
+	}
 
 	public class XMPPAuction implements Auction {
 
@@ -114,34 +143,7 @@ public class MainActivity extends Activity {
 			MainActivity.this.chat = connection.getChatManager().createChat(
 					makeXMPPID(AUCTION_ITEM_ID), null);
 
-			bidder = new Bidder(new BidderListener() {
-				@Override
-				public void bidderStateChanged(Bidder bidder) {
-					switch (bidder.getState()) {
-					case LOSING:
-						setStatus(getString(R.string.losing), bidder);
-						break;
-					case JOINED:
-						setStatus(getString(R.string.joined), bidder);
-						break;
-					case BIDDING:
-						setStatus(getString(R.string.bidding), bidder);
-						break;
-					case WINNING:
-						setStatus(getString(R.string.winning), bidder);
-						break;
-					case WON:
-						setStatus(getString(R.string.won), bidder);
-						break;
-					case LOST:
-						setStatus(getString(R.string.lost), bidder);
-						break;
-					default:
-						throw new RuntimeException(
-								"Defects - wrong BidderState");
-					}
-				}
-			}, new XMPPAuction(chat));
+			bidder = new Bidder(new BidderDisplayer(), new XMPPAuction(chat));
 			chat.addMessageListener(new AuctionMessageTranslator(id, bidder));
 			chat.sendMessage(JOIN_COMMAND_FORMAT);
 		} catch (XMPPException e) {
@@ -170,6 +172,20 @@ public class MainActivity extends Activity {
 		});
 	}
 
+	private void setStatus(final String string) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				textViewStatus.setText(string);
+				textViewCurrentPrice.setText("");
+				textViewNextPrice.setText("");
+				Log.d("han", String.format("setStatus(%s)", string));
+				buttonBid.setEnabled(false);
+				setProgressBarIndeterminateVisibility(true);
+			}
+		});
+	}
+
 	private void setProgressCircle(Bidder bidder) {
 		if((bidder.getState() == BidderState.BIDDING) || (bidder.getState() == BidderState.JOINING)){
 			setProgressBarIndeterminateVisibility(true);
@@ -181,7 +197,7 @@ public class MainActivity extends Activity {
 	class JoinTask extends AsyncTask<String, Void, Void> {
 		@Override
 		protected void onPreExecute() {
-			setStatus(getString(R.string.joining), bidder);
+			setStatus(getString(R.string.joining));
 			baseLayoutView.removeView(loginView);
 		}
 

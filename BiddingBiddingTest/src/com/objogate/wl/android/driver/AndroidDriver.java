@@ -1,5 +1,7 @@
 package com.objogate.wl.android.driver;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+
 import org.hamcrest.Matcher;
 
 import android.view.View;
@@ -10,7 +12,9 @@ import com.objogate.wl.Prober;
 import com.objogate.wl.android.Selector;
 import com.objogate.wl.android.UIPollingProber;
 import com.objogate.wl.android.matcher.ContainsAllStringsMatcher;
+import com.objogate.wl.android.matcher.ViewEnabledMatcher;
 import com.objogate.wl.android.probe.ViewAssertionProbe;
+import com.objogate.wl.android.probe.ViewSetEnabledProbe;
 
 public class AndroidDriver<T> {
 
@@ -45,5 +49,14 @@ public class AndroidDriver<T> {
 
 	protected ContainsAllStringsMatcher containsAllStrings(String... text) {
 		return new ContainsAllStringsMatcher(solo, text);
+	}
+
+	public static Matcher<View> enabled() {
+		return new ViewEnabledMatcher();
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void setEnabled(boolean enabled) {
+		check(new ViewSetEnabledProbe(selector, enabled));
 	}
 }
