@@ -16,9 +16,9 @@ public class XMPPAuction implements Auction, AuctionEventListener {
 	public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
 
-	public XMPPAuction(XMPPConnection connection) {
+	public XMPPAuction(XMPPConnection connection, String itemId) {
 		this.chat = connection.getChatManager().createChat(
-				makeXMPPID(MainActivity.AUCTION_ITEM_ID),
+				makeXMPPID(itemId),
 				new AuctionMessageTranslator(getId(connection), this));
 	}
 

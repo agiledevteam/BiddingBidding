@@ -118,7 +118,7 @@ public class MainActivity extends Activity {
 		try {
 			connection.connect();
 			connection.login(id, password);
-			Auction auction = new XMPPAuction(connection);
+			Auction auction = new XMPPAuction(connection, MainActivity.AUCTION_ITEM_ID);
 			bidder = new Bidder(new BidderDisplayer(), auction);
 			auction.addAuctionEventListener(bidder);
 			auction.join();

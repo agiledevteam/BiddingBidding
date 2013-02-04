@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.not;
 import java.util.ArrayList;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.ViewAsserts;
 import android.view.View;
 import android.widget.Button;
 
@@ -83,15 +84,32 @@ public class ActivityUITest extends
 	}
 
 	public void testRemoveLoginViewAfterJoinClicked() throws Exception {
-		ArrayList<View> views = new ArrayList<View>();
 		View loginView = solo.getView(R.id.layout_login);
 
 		auction.startSellingItem();
 
 		joinAuction();
 
-		views = solo.getCurrentViews();
+		ArrayList<View> views = solo.getCurrentViews();
 		assertEquals("Login layout found!", -1, views.indexOf(loginView));
+	}
+
+	public void testWrongServerShowsLoginFormAgainWithFlash() throws Exception {
+		View root = getActivity().getWindow().getDecorView();
+		View loginView = solo.getView(R.id.layout_login);
+
+		joinToWrongServer();
+		solo.waitForText("Failed To Login");
+
+		auction.startSellingItem();
+		ViewAsserts.assertOnScreen(root, loginView);
+	}
+
+	private void joinToWrongServer() {
+		solo.enterText(0, "not-existing-server.com");
+		solo.enterText(1, ApplicationRunner.BIDDER_ID);
+		solo.enterText(2, ApplicationRunner.BIDDER_PASSWORD);
+		solo.clickOnButton("Join Auction");
 	}
 
 	private void joinAuction() {
