@@ -112,19 +112,21 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	private void join(String host, String id, String password) {
+	private Bidder join(String host, String id, String password) {
 		ConnectionConfiguration config = new ConnectionConfiguration(host, 5222);
 		XMPPConnection connection = new XMPPConnection(config);
 		try {
 			connection.connect();
 			connection.login(id, password);
 			Auction auction = new XMPPAuction(connection, MainActivity.AUCTION_ITEM_ID);
-			bidder = new Bidder(new BidderDisplayer(), auction);
+			Bidder bidder = new Bidder(new BidderDisplayer(), auction);
 			auction.addAuctionEventListener(bidder);
 			auction.join();
+			return bidder;
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	private void setStatus(final String string, final Bidder bidder) {
@@ -153,7 +155,6 @@ public class MainActivity extends Activity {
 				textViewNextPrice.setText("");
 				Log.d("han", String.format("setStatus(%s)", string));
 				buttonBid.setEnabled(false);
-				setProgressBarIndeterminateVisibility(true);
 			}
 		});
 	}
@@ -167,23 +168,30 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	class JoinTask extends AsyncTask<String, Void, Void> {
+	class JoinTask extends AsyncTask<String, Void, Bidder> {
 		@Override
 		protected void onPreExecute() {
 			setStatus(getString(R.string.joining));
-			baseLayoutView.removeView(loginView);
+			loginView.setVisibility(View.GONE);
+			setProgressBarIndeterminateVisibility(true);
 		}
 
 		@Override
-		protected Void doInBackground(String... params) {
-			join(params[0], params[1], params[2]);
-			return null;
+		protected Bidder doInBackground(String... params) {
+			Bidder bidder = join(params[0], params[1], params[2]);
+			return bidder;
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
-			bidder.setState(BidderState.JOINED);
+		protected void onPostExecute(Bidder bidder) {
+			if (bidder != null) {
+				MainActivity.this.bidder = bidder;
+				bidder.setState(BidderState.JOINED);
+			} else {
+				setStatus(getString(R.string.failed_to_login));
+				loginView.setVisibility(View.VISIBLE);
+			}
+			setProgressBarIndeterminateVisibility(false);
 		}
 	}
-
 }

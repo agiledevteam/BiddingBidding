@@ -1,12 +1,9 @@
 package com.agileteam.biddingbidding.unittest;
 
 import static com.objogate.wl.android.driver.AndroidDriver.enabled;
+import static com.objogate.wl.android.driver.AndroidDriver.visible;
 import static org.hamcrest.CoreMatchers.not;
-
-import java.util.ArrayList;
-
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.ViewAsserts;
 import android.view.View;
 import android.widget.Button;
 
@@ -83,29 +80,29 @@ public class ActivityUITest extends
 		bidButton.is(enabled());
 	}
 
-	public void testRemoveLoginViewAfterJoinClicked() throws Exception {
-		View loginView = solo.getView(R.id.layout_login);
-
+	public void testHideLoginViewAfterJoinClicked() throws Exception {
 		auction.startSellingItem();
-
 		joinAuction();
-
-		ArrayList<View> views = solo.getCurrentViews();
-		assertEquals("Login layout found!", -1, views.indexOf(loginView));
+		new AndroidDriver<View>(solo, 2000, R.id.layout_login)
+				.is(not(visible()));
 	}
 
 	public void testWrongServerShowsLoginFormAgainWithFlash() throws Exception {
-		View root = getActivity().getWindow().getDecorView();
-		View loginView = solo.getView(R.id.layout_login);
+		auction.startSellingItem();
 
 		joinToWrongServer();
 		solo.waitForText("Failed To Login");
 
-		auction.startSellingItem();
-		ViewAsserts.assertOnScreen(root, loginView);
+		new AndroidDriver<View>(solo, 2000, R.id.layout_login).is(visible());
+
+		joinAuction();
+		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 	}
 
 	private void joinToWrongServer() {
+		solo.clearEditText(0);
+		solo.clearEditText(1);
+		solo.clearEditText(2);
 		solo.enterText(0, "not-existing-server.com");
 		solo.enterText(1, ApplicationRunner.BIDDER_ID);
 		solo.enterText(2, ApplicationRunner.BIDDER_PASSWORD);
@@ -113,6 +110,9 @@ public class ActivityUITest extends
 	}
 
 	private void joinAuction() {
+		solo.clearEditText(0);
+		solo.clearEditText(1);
+		solo.clearEditText(2);
 		solo.enterText(0, FakeAuctionServer.XMPP_HOSTNAME);
 		solo.enterText(1, ApplicationRunner.BIDDER_ID);
 		solo.enterText(2, ApplicationRunner.BIDDER_PASSWORD);

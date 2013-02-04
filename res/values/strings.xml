@@ -16,5 +16,6 @@
     <string name="bidding">Bidding</string>
     <string name="winning">Winning</string>
     <string name="won">Won</string>
+    <string name="failed_to_login">Failed To Login</string>
 
 </resources>
