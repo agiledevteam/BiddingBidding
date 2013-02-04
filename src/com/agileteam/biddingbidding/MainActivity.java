@@ -1,6 +1,6 @@
 package com.agileteam.biddingbidding;
 
-import org.jivesoftware.smack.Chat;
+
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -19,10 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
-	public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
-	private static final String AUCTION_ITEM_ID = "auction-item-54321";
-	protected Chat chat;
+	static final String AUCTION_ITEM_ID = "auction-item-54321";
 	private Button buttonBid;
 	private TextView textViewStatus;
 	private TextView textViewCurrentPrice;
@@ -55,26 +52,7 @@ public class MainActivity extends Activity {
 				setStatus(getString(R.string.lost), bidder);
 				break;
 			default:
-				throw new RuntimeException(
-						"Defects - wrong BidderState");
-			}
-		}
-	}
-
-	public class XMPPAuction implements Auction {
-
-		private Chat chat;
-
-		public XMPPAuction(Chat chat) {
-			this.chat = chat;
-		}
-
-		@Override
-		public void bid(int amount) {
-			try {
-				chat.sendMessage(String.format(BID_COMMAND_FORMAT, amount));
-			} catch (XMPPException e) {
-				e.printStackTrace();
+				throw new RuntimeException("Defects - wrong BidderState");
 			}
 		}
 	}
@@ -84,17 +62,17 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
-		
-		baseLayoutView = (ViewGroup)findViewById(R.id.layout_base);
-		loginView = (View)findViewById(R.id.layout_login);
-		
+
+		baseLayoutView = (ViewGroup) findViewById(R.id.layout_base);
+		loginView = (View) findViewById(R.id.layout_login);
+
 		buttonBid = (Button) findViewById(R.id.button_bid);
 		textViewStatus = (TextView) findViewById(R.id.textView_status);
 		textViewCurrentPrice = (TextView) findViewById(R.id.textView_currentPrice);
 		textViewNextPrice = (TextView) findViewById(R.id.textView_nextPrice);
 		final Button joinButton = (Button) findViewById(R.id.button_join_auction);
 		setProgressBarIndeterminateVisibility(false);
-		
+
 		joinButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -139,20 +117,14 @@ public class MainActivity extends Activity {
 		XMPPConnection connection = new XMPPConnection(config);
 		try {
 			connection.connect();
-			connection.login(makeXMPPID(id), password);
-			MainActivity.this.chat = connection.getChatManager().createChat(
-					makeXMPPID(AUCTION_ITEM_ID), null);
-
-			bidder = new Bidder(new BidderDisplayer(), new XMPPAuction(chat));
-			chat.addMessageListener(new AuctionMessageTranslator(id, bidder));
-			chat.sendMessage(JOIN_COMMAND_FORMAT);
+			connection.login(id, password);
+			Auction auction = new XMPPAuction(connection);
+			bidder = new Bidder(new BidderDisplayer(), auction);
+			auction.addAuctionEventListener(bidder);
+			auction.join();
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private String makeXMPPID(String id) {
-		return id + "@localhost";
 	}
 
 	private void setStatus(final String string, final Bidder bidder) {
@@ -187,13 +159,14 @@ public class MainActivity extends Activity {
 	}
 
 	private void setProgressCircle(Bidder bidder) {
-		if((bidder.getState() == BidderState.BIDDING) || (bidder.getState() == BidderState.JOINING)){
+		if ((bidder.getState() == BidderState.BIDDING)
+				|| (bidder.getState() == BidderState.JOINING)) {
 			setProgressBarIndeterminateVisibility(true);
-		}else{
+		} else {
 			setProgressBarIndeterminateVisibility(false);
 		}
 	}
-	
+
 	class JoinTask extends AsyncTask<String, Void, Void> {
 		@Override
 		protected void onPreExecute() {

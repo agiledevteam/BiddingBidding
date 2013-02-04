@@ -15,7 +15,7 @@ import org.jivesoftware.smack.XMPPException;
 import android.os.Build;
 import android.util.Log;
 
-import com.agileteam.biddingbidding.MainActivity;
+import com.agileteam.biddingbidding.XMPPAuction;
 
 public class FakeAuctionServer {
 	private SingleMessageListener messageListener = new SingleMessageListener();
@@ -80,12 +80,12 @@ public class FakeAuctionServer {
 
 	public void hasReceivedJoinRequestFrom(String sniperId)
 			throws InterruptedException {
-		receivesAMessageMatching(sniperId, equalTo(MainActivity.JOIN_COMMAND_FORMAT));
+		receivesAMessageMatching(sniperId, equalTo(XMPPAuction.JOIN_COMMAND_FORMAT));
 	}
 
 	public void hasReceivedBid(int bid, String sniperId)
 			throws InterruptedException {
-		receivesAMessageMatching(sniperId, equalTo(String.format(MainActivity.BID_COMMAND_FORMAT, bid)));
+		receivesAMessageMatching(sniperId, equalTo(String.format(XMPPAuction.BID_COMMAND_FORMAT, bid)));
 	}
 
 	private void receivesAMessageMatching(String sniperId, Matcher<? super String> messagematcher) throws InterruptedException {

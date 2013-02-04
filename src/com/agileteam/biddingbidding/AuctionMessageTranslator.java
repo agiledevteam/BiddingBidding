@@ -15,7 +15,7 @@ public class AuctionMessageTranslator implements MessageListener {
 	public AuctionMessageTranslator(String bidderId, AuctionEventListener listener) {
 		this.auctionEventListener = listener;
 		this.bidderId = bidderId;
-		Log.d("yskang", "create translator : ");
+		Log.d("yskang", "create translator : " + bidderId);
 	}
 
 	@Override

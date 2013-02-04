@@ -3,6 +3,7 @@ package com.agileteam.biddingbidding.unittest;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.agileteam.biddingbidding.MainActivity;
+import com.agileteam.biddingbidding.test.ApplicationRunner;
 import com.agileteam.biddingbidding.test.FakeAuctionServer;
 import com.jayway.android.robotium.solo.Solo;
 
@@ -20,10 +21,10 @@ public class ServerConnectionTest extends
 
 		Solo solo = new Solo(getInstrumentation(), getActivity());
 		solo.enterText(0, "127.0.0.1");
-		solo.enterText(1, "sniper");
-		solo.enterText(2, "sniper");
+		solo.enterText(1, ApplicationRunner.BIDDER_ID);
+		solo.enterText(2, ApplicationRunner.BIDDER_PASSWORD);
 		solo.clickOnButton("Join Auction");
 
-		auction.hasReceivedJoinRequestFrom("sniper");
+		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 	}
 }
