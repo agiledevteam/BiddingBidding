@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-	static final String AUCTION_ITEM_ID = "auction-item-54321";
+	static final String AUCTION_ITEM_ID = "item-54321";
 	private Button buttonBid;
 	private TextView textViewStatus;
 	private TextView textViewCurrentPrice;

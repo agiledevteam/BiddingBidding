@@ -15,15 +15,20 @@ public class XMPPAuction implements Auction, AuctionEventListener {
 	private Chat chat;
 	public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 	public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
+	public static final String AUCTION_RESOURCE = "Auction";
+	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
+	public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/"
+			+ AUCTION_RESOURCE;
 
 	public XMPPAuction(XMPPConnection connection, String itemId) {
 		this.chat = connection.getChatManager().createChat(
-				makeXMPPID(itemId),
+				auctionId(itemId, connection),
 				new AuctionMessageTranslator(getId(connection), this));
 	}
 
-	private String makeXMPPID(String id) {
-		return id + "@localhost";
+	private String auctionId(String itemId, XMPPConnection connection) {
+		return String.format(AUCTION_ID_FORMAT, itemId,
+				connection.getServiceName());
 	}
 
 	private String getId(XMPPConnection connection) {
@@ -33,7 +38,8 @@ public class XMPPAuction implements Auction, AuctionEventListener {
 	@Override
 	public void bid(int amount) {
 		try {
-			chat.sendMessage(String.format(XMPPAuction.BID_COMMAND_FORMAT, amount));
+			chat.sendMessage(String.format(XMPPAuction.BID_COMMAND_FORMAT,
+					amount));
 		} catch (XMPPException e) {
 			e.printStackTrace();
 		}
@@ -60,8 +66,7 @@ public class XMPPAuction implements Auction, AuctionEventListener {
 	}
 
 	@Override
-	public void currentPrice(int price, int increment,
-			PriceSource priceSource) {
+	public void currentPrice(int price, int increment, PriceSource priceSource) {
 		for (AuctionEventListener listener : listeners)
 			listener.currentPrice(price, increment, priceSource);
 	}
