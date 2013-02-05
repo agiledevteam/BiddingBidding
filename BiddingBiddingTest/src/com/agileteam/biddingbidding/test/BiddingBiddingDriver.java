@@ -27,7 +27,7 @@ public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 		solo.enterText(0, host);
 		solo.enterText(1, id);
 		solo.enterText(2, password);
-		solo.clickOnButton("Join Auction");
+		solo.clickOnButton("Login Auction");
 	}
 
 	public void bid() {

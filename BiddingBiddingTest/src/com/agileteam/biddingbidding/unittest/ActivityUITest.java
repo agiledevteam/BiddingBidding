@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.not;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.agileteam.biddingbidding.MainActivity;
 import com.agileteam.biddingbidding.R;
@@ -21,6 +22,10 @@ public class ActivityUITest extends
 	private Solo solo;
 	private BiddingBiddingDriver driver;
 	private AndroidDriver<Button> bidButton;
+	private AndroidDriver<Button> loginButton;
+	private AndroidDriver<EditText> hostEditText;
+	private AndroidDriver<EditText> idEditText;
+	private AndroidDriver<EditText> passwordEditText;
 
 	public ActivityUITest() {
 		super(MainActivity.class);
@@ -31,6 +36,10 @@ public class ActivityUITest extends
 		solo = new Solo(getInstrumentation(), getActivity());
 		driver = new BiddingBiddingDriver(solo, 2000);
 		bidButton = new AndroidDriver<Button>(driver, R.id.button_bid);
+		loginButton = new AndroidDriver<Button>(driver, R.id.button_login);
+		hostEditText = new AndroidDriver<EditText>(driver, R.id.editText_host);
+		idEditText = new AndroidDriver<EditText>(driver, R.id.editText_id);
+		passwordEditText = new AndroidDriver<EditText>(driver, R.id.editText_password);
 	}
 
 	public void testBidButtonInactiveWhenStateIsNotLosing() throws Exception {
@@ -80,7 +89,16 @@ public class ActivityUITest extends
 		bidButton.is(enabled());
 	}
 
-	public void testHideLoginViewAfterJoinClicked() throws Exception {
+	public void testInactiveLoginViewAfterJoinClicked() throws Exception {
+		auction.startSellingItem();
+		joinToWrongServer();
+		
+		hostEditText.is(not(enabled()));
+		idEditText.is(not(enabled()));
+		passwordEditText.is(not(enabled()));
+	}
+	
+	public void testHideLoginViewAfterJoined() throws Exception {
 		auction.startSellingItem();
 		joinAuction();
 		new AndroidDriver<View>(solo, 2000, R.id.layout_login)
@@ -106,7 +124,7 @@ public class ActivityUITest extends
 		solo.enterText(0, "not-existing-server.com");
 		solo.enterText(1, ApplicationRunner.BIDDER_ID);
 		solo.enterText(2, ApplicationRunner.BIDDER_PASSWORD);
-		solo.clickOnButton("Join Auction");
+		solo.clickOnButton("Login Auction");
 	}
 
 	private void joinAuction() {
@@ -116,7 +134,7 @@ public class ActivityUITest extends
 		solo.enterText(0, FakeAuctionServer.XMPP_HOSTNAME);
 		solo.enterText(1, ApplicationRunner.BIDDER_ID);
 		solo.enterText(2, ApplicationRunner.BIDDER_PASSWORD);
-		solo.clickOnButton("Join Auction");
+		solo.clickOnButton("Login Auction");
 	}
 
 	@Override

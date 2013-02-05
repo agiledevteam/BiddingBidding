@@ -23,7 +23,7 @@ public class ServerConnectionTest extends
 		solo.enterText(0, "127.0.0.1");
 		solo.enterText(1, ApplicationRunner.BIDDER_ID);
 		solo.enterText(2, ApplicationRunner.BIDDER_PASSWORD);
-		solo.clickOnButton("Join Auction");
+		solo.clickOnButton("Login Auction");
 
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 	}

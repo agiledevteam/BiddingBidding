@@ -29,9 +29,10 @@
 
             <ImageView
                 android:id="@+id/image_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher" />
+                android:layout_width="80dp"
+                android:layout_height="100dp"
+                android:scaleType="fitStart"
+                android:src="@raw/goos" />
 
             <TextView
                 android:id="@+id/text_item"

@@ -70,10 +70,10 @@ public class MainActivity extends Activity {
 		textViewStatus = (TextView) findViewById(R.id.textView_status);
 		textViewCurrentPrice = (TextView) findViewById(R.id.textView_currentPrice);
 		textViewNextPrice = (TextView) findViewById(R.id.textView_nextPrice);
-		final Button joinButton = (Button) findViewById(R.id.button_join_auction);
+		final Button buttonLogin = (Button) findViewById(R.id.button_login);
 		setProgressBarIndeterminateVisibility(false);
 
-		joinButton.setOnClickListener(new OnClickListener() {
+		buttonLogin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				new JoinTask().execute(host(), id(), password());
@@ -169,11 +169,18 @@ public class MainActivity extends Activity {
 		}
 	}
 
+	private void setLoginViewEnable(boolean bSet){
+		findViewById(R.id.editText_host).setEnabled(bSet);
+		findViewById(R.id.editText_id).setEnabled(bSet);
+		findViewById(R.id.editText_password).setEnabled(bSet);
+		findViewById(R.id.button_login).setEnabled(bSet);
+	}
+	
 	class JoinTask extends AsyncTask<String, Void, Bidder> {
 		@Override
 		protected void onPreExecute() {
 			setStatus(getString(R.string.joining));
-			loginView.setVisibility(View.GONE);
+			setLoginViewEnable(false);
 			setProgressBarIndeterminateVisibility(true);
 		}
 
@@ -188,11 +195,12 @@ public class MainActivity extends Activity {
 			if (bidder != null) {
 				MainActivity.this.bidder = bidder;
 				bidder.setState(BidderState.JOINED);
+				loginView.setVisibility(View.GONE);
 				BiddingItemView view = (BiddingItemView) findViewById(R.id.bidding_item_view);
 				bidder.addBidderListener(view);
 			} else {
 				setStatus(getString(R.string.failed_to_login));
-				loginView.setVisibility(View.VISIBLE);
+				setLoginViewEnable(true);
 			}
 			setProgressBarIndeterminateVisibility(false);
 		}

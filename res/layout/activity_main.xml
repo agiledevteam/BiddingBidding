@@ -43,11 +43,11 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button_join_auction"
+            android:id="@+id/button_login"
             android:layout_width="103dp"
             android:layout_height="match_parent"
             android:layout_weight="0.43"
-            android:text="@string/join_auction_button" />
+            android:text="@string/login_button" />
     </LinearLayout>
 
     <LinearLayout
