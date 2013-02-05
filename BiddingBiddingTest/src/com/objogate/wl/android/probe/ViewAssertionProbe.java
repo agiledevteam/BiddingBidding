@@ -28,9 +28,7 @@ public class ViewAssertionProbe<T> implements Probe {
 	public void describeFailureTo(Description description) {
 		if (selector.isSatisfied()) {
 			selector.describeTo(description);
-			description.appendText("\n   it ")
-					.appendText(assertionMet ? "is " : "is not ")
-					.appendDescriptionOf(assertion);
+			assertion.describeMismatch(selector.view(), description);
 		} else {
 			selector.describeFailureTo(description);
 		}
@@ -45,7 +43,7 @@ public class ViewAssertionProbe<T> implements Probe {
 	public void probe() {
 		selector.probe();
 		assertionMet = selector.isSatisfied()
-				&& assertion.matches(selector.select());
+				&& assertion.matches(selector.view());
 	}
 
 }

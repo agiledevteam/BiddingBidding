@@ -31,7 +31,7 @@ public class ViewSetEnabledProbe<T extends View> implements Probe {
 	@Override
 	public boolean isSatisfied() {
 		if (selector.isSatisfied())
-			return selector.select().isEnabled() == enabled;
+			return selector.view().isEnabled() == enabled;
 		return false;
 	}
 
@@ -39,7 +39,7 @@ public class ViewSetEnabledProbe<T extends View> implements Probe {
 	public void probe() {
 		selector.probe();
 		if (selector.isSatisfied())
-			selector.select().setEnabled(enabled);
+			selector.view().setEnabled(enabled);
 	}
 
 }

@@ -32,7 +32,7 @@ public class ActivitySelector<T> implements Selector<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T select() {
+	public T view() {
 		return (T) solo.getCurrentActivity();
 	}
 

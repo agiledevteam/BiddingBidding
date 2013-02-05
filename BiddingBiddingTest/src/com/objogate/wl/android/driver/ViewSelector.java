@@ -5,13 +5,13 @@ import org.hamcrest.Description;
 import com.jayway.android.robotium.solo.Solo;
 import com.objogate.wl.android.Selector;
 
-public class SingleViewSelector<T> implements Selector<T> {
+public class ViewSelector<T> implements Selector<T> {
 
 	private final Solo solo;
 	private final int resId;
 	private T found;
 
-	public SingleViewSelector(Solo solo, int resId) {
+	public ViewSelector(Solo solo, int resId) {
 		this.solo = solo;
 		this.resId = resId;
 	}
@@ -38,7 +38,7 @@ public class SingleViewSelector<T> implements Selector<T> {
 	}
 
 	@Override
-	public T select() {
+	public T view() {
 		return found;
 	}
 

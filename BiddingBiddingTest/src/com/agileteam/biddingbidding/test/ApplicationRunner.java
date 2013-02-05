@@ -27,27 +27,27 @@ public class ApplicationRunner {
 	}
 
 	public void showsLost(int currentPrice, int nextPrice) {
-		driver.showsSniperStatus(STATUS_LOST, currentPrice, nextPrice);
+		driver.showsSniperStatus(STATUS_LOST, currentPrice);
 	}
 
 	public void showsJoined() {
-		driver.showsSniperStatus(STATUS_JOINED, 0, 0);
+		driver.showsSniperStatus(STATUS_JOINED, 0);
 	}
 
 	public void showsLosing(int currentPrice, int nextPrice) {
-		driver.showsSniperStatus(STATUS_LOSING, currentPrice, nextPrice);
+		driver.showsSniperStatus(currentPrice, nextPrice); // when losing, it shows next price
 	}
 
 	public void showsBidding(int currentPrice, int nextPrice) {
-		driver.showsSniperStatus(STATUS_BIDDING, currentPrice, nextPrice);
+		driver.showsSniperStatus(STATUS_BIDDING, currentPrice);
 	}
 
 	public void showsWinning(int currentPrice, int nextPrice) {
-		driver.showsSniperStatus(STATUS_WINNING, currentPrice, nextPrice);
+		driver.showsSniperStatus(STATUS_WINNING, currentPrice);
 	}
 
 	public void showsWon(int currentPrice, int nextPrice) {
-		driver.showsSniperStatus(STATUS_WON, currentPrice, nextPrice);
+		driver.showsSniperStatus(STATUS_WON, currentPrice);
 	}
 
 	public void stop() {

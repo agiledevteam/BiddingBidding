@@ -8,10 +8,10 @@ import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class ListViewDriver extends AndroidDriver<ListView> {
+public class ListViewDriver extends ViewDriver<ListView> {
 
 	@SuppressWarnings("rawtypes")
-	public ListViewDriver(AndroidDriver parentDriver, int resId) {
+	public ListViewDriver(ViewDriver parentDriver, int resId) {
 		super(parentDriver, resId);
 	}
 

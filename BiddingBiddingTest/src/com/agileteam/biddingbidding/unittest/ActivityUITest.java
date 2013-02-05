@@ -1,7 +1,7 @@
 package com.agileteam.biddingbidding.unittest;
 
-import static com.objogate.wl.android.driver.AndroidDriver.enabled;
-import static com.objogate.wl.android.driver.AndroidDriver.visible;
+import static com.objogate.wl.android.driver.ViewDriver.enabled;
+import static com.objogate.wl.android.driver.ViewDriver.visible;
 import static org.hamcrest.CoreMatchers.not;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
@@ -14,18 +14,18 @@ import com.agileteam.biddingbidding.test.ApplicationRunner;
 import com.agileteam.biddingbidding.test.BiddingBiddingDriver;
 import com.agileteam.biddingbidding.test.FakeAuctionServer;
 import com.jayway.android.robotium.solo.Solo;
-import com.objogate.wl.android.driver.AndroidDriver;
+import com.objogate.wl.android.driver.ViewDriver;
 
 public class ActivityUITest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
 	FakeAuctionServer auction = new FakeAuctionServer("item-54321");
 	private Solo solo;
 	private BiddingBiddingDriver driver;
-	private AndroidDriver<Button> bidButton;
-	private AndroidDriver<Button> loginButton;
-	private AndroidDriver<EditText> hostEditText;
-	private AndroidDriver<EditText> idEditText;
-	private AndroidDriver<EditText> passwordEditText;
+	private ViewDriver<Button> bidButton;
+	private ViewDriver<Button> loginButton;
+	private ViewDriver<EditText> hostEditText;
+	private ViewDriver<EditText> idEditText;
+	private ViewDriver<EditText> passwordEditText;
 
 	public ActivityUITest() {
 		super(MainActivity.class);
@@ -35,11 +35,12 @@ public class ActivityUITest extends
 	public void setUp() {
 		solo = new Solo(getInstrumentation(), getActivity());
 		driver = new BiddingBiddingDriver(solo, 2000);
-		bidButton = new AndroidDriver<Button>(driver, R.id.button_bid);
-		loginButton = new AndroidDriver<Button>(driver, R.id.button_login);
-		hostEditText = new AndroidDriver<EditText>(driver, R.id.editText_host);
-		idEditText = new AndroidDriver<EditText>(driver, R.id.editText_id);
-		passwordEditText = new AndroidDriver<EditText>(driver, R.id.editText_password);
+		bidButton = new ViewDriver<Button>(driver, R.id.button_bid);
+		loginButton = new ViewDriver<Button>(driver, R.id.button_login);
+		hostEditText = new ViewDriver<EditText>(driver, R.id.editText_host);
+		idEditText = new ViewDriver<EditText>(driver, R.id.editText_id);
+		passwordEditText = new ViewDriver<EditText>(driver,
+				R.id.editText_password);
 	}
 
 	public void testBidButtonInactiveWhenStateIsNotLosing() throws Exception {
@@ -92,29 +93,34 @@ public class ActivityUITest extends
 	public void testInactiveLoginViewAfterJoinClicked() throws Exception {
 		auction.startSellingItem();
 		joinToWrongServer();
-		
+
 		hostEditText.is(not(enabled()));
 		idEditText.is(not(enabled()));
 		passwordEditText.is(not(enabled()));
 	}
-	
+
 	public void testHideLoginViewAfterJoined() throws Exception {
 		auction.startSellingItem();
 		joinAuction();
-		new AndroidDriver<View>(solo, 2000, R.id.layout_login)
+		new ViewDriver<View>(solo, 2000, R.id.layout_login)
 				.is(not(visible()));
 	}
 
 	public void testWrongServerShowsLoginFormAgainWithFlash() throws Exception {
+		ViewDriver<View> loginPanel = new ViewDriver<View>(solo, 2000,
+				R.id.layout_login);
+
 		auction.startSellingItem();
 
 		joinToWrongServer();
 		solo.waitForText("Failed To Login");
 
-		new AndroidDriver<View>(solo, 2000, R.id.layout_login).is(visible());
+		loginPanel.is(visible());
 
 		joinAuction();
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
+
+		loginPanel.is(not(visible()));
 	}
 
 	private void joinToWrongServer() {

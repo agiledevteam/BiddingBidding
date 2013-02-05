@@ -1,6 +1,5 @@
 package com.agileteam.biddingbidding;
 
-
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,11 +18,7 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	static final String AUCTION_ITEM_ID = "item-54321";
-	private Button buttonBid;
 	private TextView textViewStatus;
-	private TextView textViewCurrentPrice;
-	private TextView textViewNextPrice;
-	private ViewGroup baseLayoutView;
 	private View loginView;
 
 	private Bidder bidder = null;
@@ -32,28 +26,7 @@ public class MainActivity extends Activity {
 	private class BidderDisplayer implements BidderListener {
 		@Override
 		public void bidderStateChanged(Bidder bidder) {
-			switch (bidder.getState()) {
-			case LOSING:
-				setStatus(getString(R.string.losing), bidder);
-				break;
-			case JOINED:
-				setStatus(getString(R.string.joined), bidder);
-				break;
-			case BIDDING:
-				setStatus(getString(R.string.bidding), bidder);
-				break;
-			case WINNING:
-				setStatus(getString(R.string.winning), bidder);
-				break;
-			case WON:
-				setStatus(getString(R.string.won), bidder);
-				break;
-			case LOST:
-				setStatus(getString(R.string.lost), bidder);
-				break;
-			default:
-				throw new RuntimeException("Defects - wrong BidderState");
-			}
+			setProgressCircle(bidder);
 		}
 	}
 
@@ -63,13 +36,8 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
 
-		baseLayoutView = (ViewGroup) findViewById(R.id.layout_base);
 		loginView = (View) findViewById(R.id.layout_login);
-
-		buttonBid = (Button) findViewById(R.id.button_bid);
 		textViewStatus = (TextView) findViewById(R.id.textView_status);
-		textViewCurrentPrice = (TextView) findViewById(R.id.textView_currentPrice);
-		textViewNextPrice = (TextView) findViewById(R.id.textView_nextPrice);
 		final Button buttonLogin = (Button) findViewById(R.id.button_login);
 		setProgressBarIndeterminateVisibility(false);
 
@@ -118,9 +86,11 @@ public class MainActivity extends Activity {
 		try {
 			connection.connect();
 			connection.login(id, password);
-			Auction auction = new XMPPAuction(connection, MainActivity.AUCTION_ITEM_ID);
+			Auction auction = new XMPPAuction(connection,
+					MainActivity.AUCTION_ITEM_ID);
 			Bidder bidder = new Bidder(auction);
-			bidder.addBidderListener(new BidderDisplayer());
+			bidder.addBidderListener(new UIThreadBidderListener(
+					new BidderDisplayer()));
 			auction.addAuctionEventListener(bidder);
 			auction.join();
 			return bidder;
@@ -130,34 +100,9 @@ public class MainActivity extends Activity {
 		return null;
 	}
 
-	private void setStatus(final String string, final Bidder bidder) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				textViewStatus.setText(string);
-				textViewCurrentPrice.setText(Integer.toString(bidder
-						.getCurrentPrice()));
-				textViewNextPrice.setText(Integer.toString(bidder
-						.getNextPrice()));
-				Log.d("han", String.format("setStatus(%s, %d, %d)", string,
-						bidder.getCurrentPrice(), bidder.getNextPrice()));
-				buttonBid.setEnabled(getString(R.string.losing).equals(string));
-				setProgressCircle(bidder);
-			}
-		});
-	}
-
 	private void setStatus(final String string) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				textViewStatus.setText(string);
-				textViewCurrentPrice.setText("");
-				textViewNextPrice.setText("");
-				Log.d("han", String.format("setStatus(%s)", string));
-				buttonBid.setEnabled(false);
-			}
-		});
+		textViewStatus.setText(string);
+		Log.d("han", String.format("setStatus(%s)", string));
 	}
 
 	private void setProgressCircle(Bidder bidder) {
@@ -169,13 +114,13 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	private void setLoginViewEnable(boolean bSet){
+	private void setLoginViewEnable(boolean bSet) {
 		findViewById(R.id.editText_host).setEnabled(bSet);
 		findViewById(R.id.editText_id).setEnabled(bSet);
 		findViewById(R.id.editText_password).setEnabled(bSet);
 		findViewById(R.id.button_login).setEnabled(bSet);
 	}
-	
+
 	class JoinTask extends AsyncTask<String, Void, Bidder> {
 		@Override
 		protected void onPreExecute() {
@@ -193,16 +138,38 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(Bidder bidder) {
 			if (bidder != null) {
+				BiddingItemView view = (BiddingItemView) findViewById(R.id.bidding_item_view);
+				bidder.addBidderListener(new UIThreadBidderListener(view));
+
 				MainActivity.this.bidder = bidder;
 				bidder.setState(BidderState.JOINED);
 				loginView.setVisibility(View.GONE);
-				BiddingItemView view = (BiddingItemView) findViewById(R.id.bidding_item_view);
-				bidder.addBidderListener(view);
 			} else {
 				setStatus(getString(R.string.failed_to_login));
 				setLoginViewEnable(true);
 			}
 			setProgressBarIndeterminateVisibility(false);
 		}
+	}
+
+	private class UIThreadBidderListener implements BidderListener {
+
+		private BidderListener listener;
+
+		public UIThreadBidderListener(BidderListener listener) {
+			this.listener = listener;
+		}
+
+		@Override
+		public void bidderStateChanged(final Bidder bidder) {
+			runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					listener.bidderStateChanged(bidder);
+				}
+			});
+		}
+
 	}
 }

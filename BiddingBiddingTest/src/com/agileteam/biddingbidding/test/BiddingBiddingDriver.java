@@ -1,11 +1,15 @@
 package com.agileteam.biddingbidding.test;
 
+import static com.objogate.wl.android.driver.ViewDriver.allText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.hasItem;
 import android.app.Activity;
 import android.view.View;
 
 import com.agileteam.biddingbidding.R;
 import com.jayway.android.robotium.solo.Solo;
 import com.objogate.wl.android.driver.AndroidDriver;
+import com.objogate.wl.android.driver.ViewDriver;
 
 public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 
@@ -13,10 +17,20 @@ public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 		super(solo, timeout);
 	}
 
-	public void showsSniperStatus(String status, int currentPrice, int nextPrice) {
-		new AndroidDriver<View>(this, R.id.status).is(containsAllStrings(
-				status, Integer.toString(currentPrice),
-				Integer.toString(nextPrice)));
+	public void showsSniperStatus(String status, int currentPrice) {
+		new ViewDriver<View>(this, R.id.status).has(
+				allText(),
+				allOf(hasItem(status), hasItem(price(currentPrice))));
+	}
+	
+	public void showsSniperStatus(int currentPrice, int nextPrice) {
+		new ViewDriver<View>(this, R.id.status).has(
+				allText(),
+				allOf(hasItem(price(currentPrice)), hasItem(price(nextPrice))));
+	}
+
+	private String price(int price) {
+		return String.format(solo.getString(R.string.price_format), price);
 	}
 
 	public void dispose() {
@@ -31,6 +45,6 @@ public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 	}
 
 	public void bid() {
-		solo.clickOnButton("Bid!");
+		solo.clickOnButton(0);
 	}
 }

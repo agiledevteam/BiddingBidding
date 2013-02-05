@@ -13,8 +13,9 @@ public class BiddingItemView extends RelativeLayout implements BidderListener {
 
 	private TextView textItem;
 	private ImageView imageItem;
-	private Button buttonCommand;
+	private Button buttonBid;
 	private TextView textPrice;
+	private String priceFormat;
 
 	public BiddingItemView(Context context) {
 		this(context, null);
@@ -30,23 +31,43 @@ public class BiddingItemView extends RelativeLayout implements BidderListener {
 		textItem = (TextView) findViewById(R.id.text_item);
 		textPrice = (TextView) findViewById(R.id.text_price);
 		imageItem = (ImageView) findViewById(R.id.image_item);
-		buttonCommand = (Button) findViewById(R.id.button_command);
+		buttonBid = (Button) findViewById(R.id.button_bid);
+		priceFormat = context.getString(R.string.price_format);
 	}
 
 	@Override
 	public void bidderStateChanged(Bidder bidder) {
-		textPrice.setText(format(bidder.getCurrentPrice()));
+		textPrice.setText(formatPrice(bidder.getCurrentPrice()));
 		if (bidder.getState() == BidderState.LOSING) {
-			buttonCommand.setText(format(bidder.getNextPrice()));
-			buttonCommand.setEnabled(true);
+			buttonBid.setText(formatPrice(bidder.getNextPrice()));
+			buttonBid.setEnabled(true);
 		} else {
-			buttonCommand.setText(bidder.getState().toString());
-			buttonCommand.setEnabled(false);
+			buttonBid.setText(getStateString(bidder.getState()));
+			buttonBid.setEnabled(false);
 		}
 	}
 
-	private String format(int price) {
-		return String.format("₩ %,d", price);
+	private String getStateString(BidderState state) {
+		switch (state) {
+		case LOSING:
+			return getContext().getString(R.string.losing);
+		case JOINED:
+			return getContext().getString(R.string.joined);
+		case BIDDING:
+			return getContext().getString(R.string.bidding);
+		case WINNING:
+			return getContext().getString(R.string.winning);
+		case WON:
+			return getContext().getString(R.string.won);
+		case LOST:
+			return getContext().getString(R.string.lost);
+		default:
+			throw new RuntimeException("Defects - wrong BidderState");
+		}
+	}
+
+	private String formatPrice(int price) {
+		return String.format(priceFormat, price);
 	}
 
 }
