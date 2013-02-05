@@ -3,9 +3,9 @@
     android:id="@+id/layout_base"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:animateLayoutChanges="true"
     tools:context=".MainActivity" >
 
     <LinearLayout
@@ -81,6 +81,10 @@
             android:enabled="false"
             android:text="@string/bid_button" />
 
+        <com.agileteam.biddingbidding.BiddingItemView
+            android:id="@+id/bidding_item_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

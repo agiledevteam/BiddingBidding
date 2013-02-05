@@ -15,7 +15,10 @@ public class BidderTest extends TestCase {
 	private final Mockery context = new Mockery();
 	private final BidderListener listener = context.mock(BidderListener.class);
 	private final Auction auction = context.mock(Auction.class);
-	private final Bidder bidder = new Bidder(listener, auction);
+	private final Bidder bidder = new Bidder(auction);
+	{
+		bidder.addBidderListener(listener);
+	}
 
 	@Override
 	public void tearDown() {

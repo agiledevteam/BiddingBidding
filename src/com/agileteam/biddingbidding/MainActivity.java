@@ -119,7 +119,8 @@ public class MainActivity extends Activity {
 			connection.connect();
 			connection.login(id, password);
 			Auction auction = new XMPPAuction(connection, MainActivity.AUCTION_ITEM_ID);
-			Bidder bidder = new Bidder(new BidderDisplayer(), auction);
+			Bidder bidder = new Bidder(auction);
+			bidder.addBidderListener(new BidderDisplayer());
 			auction.addAuctionEventListener(bidder);
 			auction.join();
 			return bidder;
@@ -187,6 +188,8 @@ public class MainActivity extends Activity {
 			if (bidder != null) {
 				MainActivity.this.bidder = bidder;
 				bidder.setState(BidderState.JOINED);
+				BiddingItemView view = (BiddingItemView) findViewById(R.id.bidding_item_view);
+				bidder.addBidderListener(view);
 			} else {
 				setStatus(getString(R.string.failed_to_login));
 				loginView.setVisibility(View.VISIBLE);

@@ -1,15 +1,17 @@
 package com.agileteam.biddingbidding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Bidder implements AuctionEventListener {
 
 	private Auction auction;
-	private BidderListener listener;
+	private List<BidderListener> listeners = new ArrayList<BidderListener>();
 	private int currentPrice;
 	private int nextPrice;
 	private BidderState state = BidderState.JOINING;
 
-	public Bidder(BidderListener listener, Auction auction) {
-		this.listener = listener;
+	public Bidder(Auction auction) {
 		this.auction = auction;
 	}
 
@@ -26,7 +28,7 @@ public class Bidder implements AuctionEventListener {
 		}else {
 			throw new RuntimeException("Defect - Wrong BidderState");
 		}
-		listener.bidderStateChanged(this);
+		notifyChanged();
 	}
 
 	@Override
@@ -38,7 +40,7 @@ public class Bidder implements AuctionEventListener {
 		} else {
 			this.state = BidderState.LOSING;
 		}
-		listener.bidderStateChanged(this);
+		notifyChanged();
 	}
 
 	public int getCurrentPrice() {
@@ -51,7 +53,7 @@ public class Bidder implements AuctionEventListener {
 
 	public void setState(BidderState state){
 		this.state = state; 
-		listener.bidderStateChanged(this);
+		notifyChanged();
 	}
 	
 	public BidderState getState() {
@@ -62,7 +64,21 @@ public class Bidder implements AuctionEventListener {
 		currentPrice = nextPrice;
 		state = BidderState.BIDDING;
 		auction.bid(nextPrice);
-		listener.bidderStateChanged(this);
+		notifyChanged();
+	}
+
+	public void addBidderListener(BidderListener listener) {
+		listeners.add(listener);
+	}
+
+	public void removeListener(BidderListener listener) {
+		listeners.remove(listener);
+	}
+
+	private void notifyChanged() {
+		for (BidderListener listener : listeners) {
+			listener.bidderStateChanged(this);
+		}
 	}
 
 }

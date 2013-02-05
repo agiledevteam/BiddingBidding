@@ -65,7 +65,7 @@ public class FakeAuctionServer {
 
 	public void stop() {
 		// TODO disconnect hangs but if UI button clicked, it runs successfully
-		// connection.disconnect();
+		//connection.disconnect();
 	}
 
 	public void reportPrice(int price, int increment, String bidder)
