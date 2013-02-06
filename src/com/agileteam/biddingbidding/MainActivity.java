@@ -20,6 +20,7 @@ public class MainActivity extends Activity {
 	static final String AUCTION_ITEM_ID = "item-54321";
 	private TextView textViewStatus;
 	private View loginView;
+	private View statusView;
 
 	private Bidder bidder = null;
 
@@ -36,7 +37,9 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
 
-		loginView = (View) findViewById(R.id.layout_login);
+		loginView = findViewById(R.id.layout_login);
+		statusView = findViewById(R.id.status);
+		
 		textViewStatus = (TextView) findViewById(R.id.textView_status);
 		final Button buttonLogin = (Button) findViewById(R.id.button_login);
 		setProgressBarIndeterminateVisibility(false);
@@ -144,6 +147,7 @@ public class MainActivity extends Activity {
 				MainActivity.this.bidder = bidder;
 				bidder.setState(BidderState.JOINED);
 				loginView.setVisibility(View.GONE);
+				statusView.setVisibility(View.VISIBLE);
 			} else {
 				setStatus(getString(R.string.failed_to_login));
 				setLoginViewEnable(true);

@@ -15,6 +15,7 @@ import com.objogate.wl.Probe;
 import com.objogate.wl.Query;
 import com.objogate.wl.android.UIPollingProber;
 import com.objogate.wl.android.matcher.ViewEnabledMatcher;
+import com.objogate.wl.android.matcher.ViewForcusedMatcher;
 import com.objogate.wl.android.matcher.ViewVisibleMatcher;
 import com.objogate.wl.android.probe.ViewAssertionProbe;
 import com.objogate.wl.android.probe.ViewPropertyAssertionProbe;
@@ -57,6 +58,10 @@ public class ViewDriver<T extends View> extends AndroidDriver<T> {
 		return new ViewVisibleMatcher();
 	}
 
+	public static Matcher<View> forcused() {
+		return new ViewForcusedMatcher();
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void setEnabled(boolean enabled) {
 		check(new ViewSetEnabledProbe(selector, enabled));

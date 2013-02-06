@@ -4,27 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="0dp"
-    android:background="#ccc" >
+    android:background="#DDD" >
 
-    <RelativeLayout
+    <TextView
         android:id="@+id/relativeLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="9dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="20dp"
-        android:background="#444"
-        android:paddingBottom="2dp"
-        android:paddingLeft="1dp"
-        android:paddingRight="2dp"
-        android:paddingTop="1dp" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/inner_frame"
+        android:layout_alignLeft="@+id/inner_frame"
+        android:layout_alignRight="@+id/inner_frame"
+        android:layout_alignTop="@+id/inner_frame"
+        android:layout_marginBottom="-5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="-5dp"
+        android:layout_marginTop="5dp"
+        android:background="#aaa" />
 
-        <RelativeLayout
+<RelativeLayout
             android:id="@+id/inner_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#fff"
+            android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
             android:padding="10dp" >
 
             <ImageView
@@ -69,9 +73,6 @@
                 android:textAppearance="?android:attr/textAppearanceLargeInverse" />
 
         </RelativeLayout>
-
-    </RelativeLayout>
-
     <ImageView
         android:id="@+id/image_bidder"
         android:layout_width="wrap_content"

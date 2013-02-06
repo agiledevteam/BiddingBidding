@@ -10,7 +10,9 @@
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:visibility="gone" >
+
         <com.agileteam.biddingbidding.BiddingItemView
             android:id="@+id/bidding_item_view"
             android:layout_width="match_parent"
@@ -39,20 +41,29 @@
             android:id="@+id/editText_host"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/host_hint" />
+            android:hint="@string/host_hint"
+            android:lines="1"
+            android:singleLine="true" >
+
+            <requestFocus />
+        </EditText>
 
         <EditText
             android:id="@+id/editText_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/id_hint" />
+            android:hint="@string/id_hint"
+            android:lines="1"
+            android:singleLine="true" />
 
         <EditText
             android:id="@+id/editText_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password_hint"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:lines="1"
+            android:singleLine="true" />
 
         <Button
             android:id="@+id/button_login"

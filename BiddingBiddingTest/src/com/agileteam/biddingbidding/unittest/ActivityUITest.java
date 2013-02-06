@@ -2,8 +2,10 @@ package com.agileteam.biddingbidding.unittest;
 
 import static com.objogate.wl.android.driver.ViewDriver.enabled;
 import static com.objogate.wl.android.driver.ViewDriver.visible;
+import static com.objogate.wl.android.driver.ViewDriver.forcused;
 import static org.hamcrest.CoreMatchers.not;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -123,6 +125,15 @@ public class ActivityUITest extends
 		loginPanel.is(not(visible()));
 	}
 
+	public void testSingleLineInputAndEnterMakeCurserMoveToNextInputTextView() throws Exception{
+		solo.enterText(0, "singleLine");
+		solo.sendKey(KeyEvent.KEYCODE_ENTER);
+		idEditText.is(forcused());
+		solo.enterText(0, "singleLine");
+		solo.sendKey(KeyEvent.KEYCODE_ENTER);
+		passwordEditText.is(forcused());
+	}
+	
 	private void joinToWrongServer() {
 		solo.clearEditText(0);
 		solo.clearEditText(1);
