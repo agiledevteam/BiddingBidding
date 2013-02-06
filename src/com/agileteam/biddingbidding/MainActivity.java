@@ -9,8 +9,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,6 +52,22 @@ public class MainActivity extends Activity {
 				new JoinTask().execute(host(), id(), password());
 			}
 		});
+		
+		buttonLogin.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Button loginButton = (Button)v;
+				int action = event.getAction();
+				if(action == MotionEvent.ACTION_DOWN){
+					loginButton.setBackgroundResource(R.raw.button_blue_clicked);
+				}else if(action == MotionEvent.ACTION_UP){
+					loginButton.setBackgroundResource(R.raw.button_blue);
+				}
+				return false;
+			}
+			
+		});
 
 		final Button bidButton = (Button) findViewById(R.id.button_bid);
 		bidButton.setOnClickListener(new OnClickListener() {
@@ -57,6 +75,22 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				bidder.bid();
 			}
+		});
+		
+		bidButton.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Button bidButton = (Button)v;
+				int action = event.getAction();
+				if(action == MotionEvent.ACTION_DOWN){
+					bidButton.setBackgroundResource(R.raw.button_red_clicked);
+				}else if(action == MotionEvent.ACTION_UP){
+					bidButton.setBackgroundResource(R.raw.button_red);
+				}
+				return false;
+			}
+			
 		});
 	}
 
