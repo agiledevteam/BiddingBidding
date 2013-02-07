@@ -67,8 +67,8 @@ public class ViewDriver<T extends View> extends AndroidDriver<T> {
 		check(new ViewSetEnabledProbe(selector, enabled));
 	}
 
-	public static <T extends View> Query<T, List<String>> allText() {
-		return new Query<T, List<String>>() {
+	public static <T extends View> Query<T, Iterable<String>> allText() {
+		return new Query<T, Iterable<String>>() {
 
 			@Override
 			public void describeTo(Description arg0) {

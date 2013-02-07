@@ -4,6 +4,9 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import com.objogate.wl.Query;
+import com.objogate.wl.android.matcher.ViewPropertyMatcher;
+
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -11,12 +14,16 @@ import android.widget.ListView;
 public class ListViewDriver extends ViewDriver<ListView> {
 
 	@SuppressWarnings("rawtypes")
-	public ListViewDriver(ViewDriver parentDriver, int resId) {
+	public ListViewDriver(AndroidDriver parentDriver, int resId) {
 		super(parentDriver, resId);
 	}
 
 	public void hasItem(Matcher<View> matcher) {
 		is(new ListItemMatcher(matcher));
+	}
+
+	public <P> void hasItem(Query<View, P> query, Matcher<? super P> matcher) {
+		hasItem(new ViewPropertyMatcher<P>(query, matcher));
 	}
 
 	private class ListItemMatcher extends TypeSafeMatcher<ListView> {
