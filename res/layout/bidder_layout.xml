@@ -14,10 +14,10 @@
         android:layout_alignLeft="@+id/inner_frame"
         android:layout_alignRight="@+id/inner_frame"
         android:layout_alignTop="@+id/inner_frame"
-        android:layout_marginBottom="-5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="-10dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginRight="-5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="0dp"
         android:background="@raw/shadow" />
 
 <RelativeLayout
@@ -35,6 +35,7 @@
                 android:id="@+id/image_item"
                 android:layout_width="80dp"
                 android:layout_height="100dp"
+                android:layout_marginRight="10dp"
                 android:scaleType="fitStart"
                 android:src="@raw/goos" />
 
@@ -42,23 +43,11 @@
                 android:id="@+id/text_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_above="@+id/text_price"
                 android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/image_item"
-                android:layout_marginLeft="16dp"
                 android:layout_toRightOf="@+id/image_item"
                 android:text="Large Text"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <TextView
-                android:id="@+id/text_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/text_item"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/text_item"
-                android:text="Medium Text"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#f77" />
 
             <Button
                 android:id="@+id/button_bid"
@@ -66,14 +55,25 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/image_item"
                 android:layout_centerHorizontal="true"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/button_red"
                 android:text="Button"
                 android:textAppearance="?android:attr/textAppearanceLargeInverse"
                 android:textColor="#fff"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/image_item"
+                android:layout_alignLeft="@+id/text_item"
+                android:layout_alignRight="@+id/text_item"
+                android:text="Medium Text"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#f77" />
 
         </RelativeLayout>
     <ImageView
