@@ -23,8 +23,8 @@ public class AuctionMessageTranslator implements MessageListener {
 		AuctionEvent event = AuctionEvent.from(message.getBody());
 		String eventType = event.type();
 		
-		Log.d("yskang", "Sniper receive message: " + event);
-		Log.d("yskang", "Sniper receive message from ");
+		Log.d("yskang", "receive message: " + message.getBody());
+		Log.d("yskang", "receive message from: " + chat.getParticipant());
 		
 		if (EVENT_TYPE_CLOSE.equals(eventType)) {
 			auctionEventListener.auctionClosed();
