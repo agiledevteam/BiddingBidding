@@ -60,10 +60,14 @@ public class Bidder implements AuctionEventListener {
 		return state;
 	}
 
+	public void join() {
+		auction.join();
+	}
+
 	public void bid() {
+		auction.bid(nextPrice);
 		currentPrice = nextPrice;
 		state = BidderState.BIDDING;
-		auction.bid(nextPrice);
 		notifyChanged();
 	}
 
@@ -80,5 +84,4 @@ public class Bidder implements AuctionEventListener {
 			listener.bidderStateChanged(this);
 		}
 	}
-
 }

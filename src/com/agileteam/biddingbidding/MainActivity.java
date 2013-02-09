@@ -1,9 +1,5 @@
 package com.agileteam.biddingbidding;
 
-import org.jivesoftware.smack.ConnectionConfiguration;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,17 +33,18 @@ public class MainActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
 
+		setProgressBarIndeterminateVisibility(false);
+
 		loginView = findViewById(R.id.layout_login);
 		statusView = findViewById(R.id.status);
 
 		textViewStatus = (TextView) findViewById(R.id.textView_status);
-		final Button buttonLogin = (Button) findViewById(R.id.button_login);
-		setProgressBarIndeterminateVisibility(false);
 
+		final Button buttonLogin = (Button) findViewById(R.id.button_login);
 		buttonLogin.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new JoinTask().execute(host(), id(), password());
+				login();
 			}
 		});
 
@@ -83,24 +80,14 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	private Bidder join(String host, String id, String password) {
-		ConnectionConfiguration config = new ConnectionConfiguration(host, 5222);
-		XMPPConnection connection = new XMPPConnection(config);
-		try {
-			connection.connect();
-			connection.login(id, password);
-			Auction auction = new XMPPAuction(connection,
-					MainActivity.AUCTION_ITEM_ID);
-			Bidder bidder = new Bidder(auction);
-			bidder.addBidderListener(new UIThreadBidderListener(
-					new BidderDisplayer()));
-			auction.addAuctionEventListener(bidder);
-			auction.join();
-			return bidder;
-		} catch (XMPPException e) {
-			e.printStackTrace();
-		}
-		return null;
+	private Bidder join(XMPPAuctionHouse house, String itemId) {
+		Auction auction = house.auctionFor(itemId);
+		Bidder bidder = new Bidder(auction);
+		auction.addAuctionEventListener(bidder);
+		bidder.addBidderListener(new UIThreadBidderListener(
+				new BidderDisplayer()));
+		bidder.join();
+		return bidder;
 	}
 
 	private void setStatus(final String string) {
@@ -124,6 +111,10 @@ public class MainActivity extends Activity {
 		findViewById(R.id.button_login).setEnabled(bSet);
 	}
 
+	private void login() {
+		new JoinTask().execute(host(), id(), password());
+	}
+
 	class JoinTask extends AsyncTask<String, Void, Bidder> {
 		@Override
 		protected void onPreExecute() {
@@ -134,8 +125,11 @@ public class MainActivity extends Activity {
 
 		@Override
 		protected Bidder doInBackground(String... params) {
-			Bidder bidder = join(params[0], params[1], params[2]);
-			return bidder;
+			XMPPAuctionHouse house = XMPPAuctionHouse.login(params[0], params[1], params[2]);
+			if (house != null) {
+				return join(house, AUCTION_ITEM_ID);
+			}
+			return null;
 		}
 
 		@Override
@@ -143,7 +137,6 @@ public class MainActivity extends Activity {
 			if (bidder != null) {
 				BiddingItemView view = (BiddingItemView) findViewById(R.id.bidding_item_view);
 				bidder.addBidderListener(new UIThreadBidderListener(view));
-
 				MainActivity.this.bidder = bidder;
 				bidder.setState(BidderState.JOINED);
 				loginView.setVisibility(View.GONE);
