@@ -24,7 +24,6 @@ public class ActivityUITest extends
 	private Solo solo;
 	private BiddingBiddingDriver driver;
 	private ViewDriver<Button> bidButton;
-	private ViewDriver<Button> loginButton;
 	private ViewDriver<EditText> hostEditText;
 	private ViewDriver<EditText> idEditText;
 	private ViewDriver<EditText> passwordEditText;
@@ -38,7 +37,6 @@ public class ActivityUITest extends
 		solo = new Solo(getInstrumentation(), getActivity());
 		driver = new BiddingBiddingDriver(solo, 2000);
 		bidButton = new ViewDriver<Button>(driver, R.id.button_bid);
-		loginButton = new ViewDriver<Button>(driver, R.id.button_login);
 		hostEditText = new ViewDriver<EditText>(driver, R.id.editText_host);
 		idEditText = new ViewDriver<EditText>(driver, R.id.editText_id);
 		passwordEditText = new ViewDriver<EditText>(driver,
@@ -65,10 +63,9 @@ public class ActivityUITest extends
 
 	public void testBidButtonActiveWhenLosing() throws Exception {
 		auction.startSellingItem();
-
 		joinAuction();
-
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
+
 		bidButton.setEnabled(false);
 		auction.reportPrice(2000, 100, "JYP");
 		bidButton.is(enabled());
@@ -102,8 +99,7 @@ public class ActivityUITest extends
 	public void testHideLoginViewAfterJoined() throws Exception {
 		auction.startSellingItem();
 		joinAuction();
-		new ViewDriver<View>(solo, 2000, R.id.layout_login)
-				.is(not(visible()));
+		new ViewDriver<View>(solo, 2000, R.id.layout_login).is(not(visible()));
 	}
 
 	public void testWrongServerShowsLoginFormAgainWithFlash() throws Exception {
@@ -113,7 +109,7 @@ public class ActivityUITest extends
 		auction.startSellingItem();
 
 		joinToWrongServer();
-		solo.waitForText("Failed To Login");
+		assertTrue(solo.waitForText("Failed To Connect"));
 
 		loginPanel.is(visible());
 
@@ -123,7 +119,8 @@ public class ActivityUITest extends
 		loginPanel.is(not(visible()));
 	}
 
-	public void testSingleLineInputAndEnterMakeCurserMoveToNextInputTextView() throws Exception{
+	public void testSingleLineInputAndEnterMakeCurserMoveToNextInputTextView()
+			throws Exception {
 		solo.enterText(0, "singleLine");
 		solo.sendKey(KeyEvent.KEYCODE_ENTER);
 		idEditText.is(forcused());
@@ -131,7 +128,7 @@ public class ActivityUITest extends
 		solo.sendKey(KeyEvent.KEYCODE_ENTER);
 		passwordEditText.is(forcused());
 	}
-	
+
 	private void joinToWrongServer() {
 		solo.clearEditText(0);
 		solo.clearEditText(1);
