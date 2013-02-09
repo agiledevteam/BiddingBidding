@@ -11,13 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="#DDD"
         android:visibility="gone" >
-
-        <com.agileteam.biddingbidding.BiddingItemView
-            android:id="@+id/bidding_item_view"
+        <ListView
+            android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
-        </com.agileteam.biddingbidding.BiddingItemView>
+            android:layout_height="match_parent" >
+        </ListView>
     </LinearLayout>
 
     <LinearLayout

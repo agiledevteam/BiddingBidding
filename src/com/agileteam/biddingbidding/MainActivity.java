@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -18,7 +19,8 @@ public class MainActivity extends Activity {
 	private View loginView;
 	private View statusView;
 
-	private Bidder bidder = null;
+	private ListView listView;
+	private BidderListAdapter bidderList;
 
 	private class BidderDisplayer implements BidderListener {
 		@Override
@@ -37,6 +39,9 @@ public class MainActivity extends Activity {
 
 		loginView = findViewById(R.id.layout_login);
 		statusView = findViewById(R.id.status);
+		listView = (ListView) findViewById(R.id.list);
+		bidderList = new BidderListAdapter(this);
+		listView.setAdapter(bidderList);
 
 		textViewStatus = (TextView) findViewById(R.id.textView_status);
 
@@ -45,14 +50,6 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				login();
-			}
-		});
-
-		final Button bidButton = (Button) findViewById(R.id.button_bid);
-		bidButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				bidder.bid();
 			}
 		});
 	}
@@ -135,9 +132,8 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(Bidder bidder) {
 			if (bidder != null) {
-				BiddingItemView view = (BiddingItemView) findViewById(R.id.bidding_item_view);
-				bidder.addBidderListener(new UIThreadBidderListener(view));
-				MainActivity.this.bidder = bidder;
+				bidderList.add(bidder);
+				bidder.addBidderListener(new UIThreadBidderListener(bidderList));
 				bidder.setState(BidderState.JOINED);
 				loginView.setVisibility(View.GONE);
 				statusView.setVisibility(View.VISIBLE);

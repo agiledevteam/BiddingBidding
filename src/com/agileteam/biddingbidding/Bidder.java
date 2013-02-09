@@ -84,4 +84,8 @@ public class Bidder implements AuctionEventListener {
 			listener.bidderStateChanged(this);
 		}
 	}
+
+	public String getItemDescription() {
+		return "임베디드 TDD를 위한 C";
+	}
 }
