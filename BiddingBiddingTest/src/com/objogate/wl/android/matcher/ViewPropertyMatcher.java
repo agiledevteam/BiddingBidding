@@ -30,8 +30,8 @@ public class ViewPropertyMatcher<P> extends TypeSafeMatcher<View> {
 	}
 
 	@Override
-	protected boolean matchesSafely(View arg0) {
-		return matcher.matches(arg0);
+	protected boolean matchesSafely(View item) {
+		return matcher.matches(query.query(item));
 	}
 
 }

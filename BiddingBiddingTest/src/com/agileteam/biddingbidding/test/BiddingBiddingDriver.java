@@ -9,6 +9,7 @@ import android.view.View;
 import com.agileteam.biddingbidding.R;
 import com.jayway.android.robotium.solo.Solo;
 import com.objogate.wl.android.driver.AndroidDriver;
+import com.objogate.wl.android.driver.ListViewDriver;
 import com.objogate.wl.android.driver.ViewDriver;
 
 public class BiddingBiddingDriver extends AndroidDriver<Activity> {
@@ -18,13 +19,13 @@ public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 	}
 
 	public void showsSniperStatus(String status, int currentPrice) {
-		new ViewDriver<View>(this, R.id.status).has(
+		new ListViewDriver(this, R.id.list).hasItem(
 				allText(),
 				allOf(hasItem(status), hasItem(price(currentPrice))));
 	}
 	
 	public void showsSniperStatus(int currentPrice, int nextPrice) {
-		new ViewDriver<View>(this, R.id.status).has(
+		new ListViewDriver(this, R.id.list).hasItem(
 				allText(),
 				allOf(hasItem(price(currentPrice)), hasItem(price(nextPrice))));
 	}
