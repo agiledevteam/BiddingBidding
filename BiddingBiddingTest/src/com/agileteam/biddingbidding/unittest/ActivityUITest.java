@@ -47,12 +47,10 @@ public class ActivityUITest extends
 
 	public void testBidButtonInactiveWhenStateIsNotLosing() throws Exception {
 		auction.startSellingItem();
-
-		bidButton.setEnabled(true);
 		joinAuction();
-		bidButton.is(not(enabled()));
 
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
+		bidButton.is(not(enabled()));
 
 		bidButton.setEnabled(true);
 		auction.reportPrice(2000, 100, ApplicationRunner.BIDDER_ID);
