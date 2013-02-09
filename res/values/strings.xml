@@ -16,6 +16,8 @@
     <string name="bidding">Bidding</string>
     <string name="winning">Winning</string>
     <string name="won">Won</string>
+    <string name="failed_to_connect">Failed To Connect</string>
+    <string name="failed_to_join">Failed To Join</string>
     <string name="failed_to_login">Failed To Login</string>
     <string name="price_format">₩ %,d</string>
 

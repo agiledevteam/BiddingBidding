@@ -77,7 +77,8 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
-	private Bidder join(XMPPAuctionHouse house, String itemId) {
+	private Bidder join(XMPPAuctionHouse house, String itemId)
+			throws AuctionIsNotAvailable {
 		Auction auction = house.auctionFor(itemId);
 		Bidder bidder = new Bidder(auction);
 		auction.addAuctionEventListener(bidder);
@@ -112,7 +113,7 @@ public class MainActivity extends Activity {
 		new JoinTask().execute(host(), id(), password());
 	}
 
-	class JoinTask extends AsyncTask<String, Void, Bidder> {
+	class JoinTask extends AsyncTask<String, Void, JoinResult> {
 		@Override
 		protected void onPreExecute() {
 			setStatus(getString(R.string.joining));
@@ -121,28 +122,54 @@ public class MainActivity extends Activity {
 		}
 
 		@Override
-		protected Bidder doInBackground(String... params) {
-			XMPPAuctionHouse house = XMPPAuctionHouse.login(params[0], params[1], params[2]);
-			if (house != null) {
-				return join(house, AUCTION_ITEM_ID);
+		protected JoinResult doInBackground(String... params) {
+			try {
+				XMPPAuctionHouse house = XMPPAuctionHouse.login(params[0], params[1], params[2]);
+				Bidder bidder = join(house, AUCTION_ITEM_ID);
+				return JoinResult.ok(bidder);
+			} catch (AuctionIsNotAvailable e) {
+				return JoinResult.failed(getString(R.string.failed_to_join));
+			} catch (AuctionIsNotAccessible e) {
+				return JoinResult.failed(getString(R.string.failed_to_connect));
+			} catch (AuctionLoginFailure e) {
+				return JoinResult.failed(getString(R.string.failed_to_login));
 			}
-			return null;
 		}
 
 		@Override
-		protected void onPostExecute(Bidder bidder) {
-			if (bidder != null) {
-				bidderList.add(bidder);
-				bidder.addBidderListener(new UIThreadBidderListener(bidderList));
-				bidder.setState(BidderState.JOINED);
+		protected void onPostExecute(JoinResult result) {
+			if (result.ok) {
+				bidderList.add(result.bidder);
 				loginView.setVisibility(View.GONE);
 				statusView.setVisibility(View.VISIBLE);
 			} else {
-				setStatus(getString(R.string.failed_to_login));
+				setStatus(result.message);
 				setLoginViewEnable(true);
 			}
 			setProgressBarIndeterminateVisibility(false);
 		}
+	}
+
+	private static class JoinResult {
+
+		public boolean ok;
+		public Bidder bidder;
+		public String message;
+
+		public static JoinResult ok(Bidder bidder) {
+			JoinResult result = new JoinResult();
+			result.ok = true;
+			result.bidder = bidder;
+			return result;
+		}
+
+		public static JoinResult failed(String message) {
+			JoinResult result = new JoinResult();
+			result.ok = false;
+			result.message = message;
+			return result;
+		}
+
 	}
 
 	private class UIThreadBidderListener implements BidderListener {

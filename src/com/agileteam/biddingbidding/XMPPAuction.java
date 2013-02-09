@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.Presence;
+
+import android.util.Log;
 
 public class XMPPAuction implements Auction, AuctionEventListener {
 	/**
@@ -21,7 +25,7 @@ public class XMPPAuction implements Auction, AuctionEventListener {
 			+ AUCTION_RESOURCE;
 
 	public XMPPAuction(XMPPConnection connection, String itemId) {
-		this.chat = connection.getChatManager().createChat(
+		chat = connection.getChatManager().createChat(
 				auctionId(itemId, connection),
 				new AuctionMessageTranslator(getId(connection), this));
 	}

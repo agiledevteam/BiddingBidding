@@ -1,6 +1,8 @@
 package com.agileteam.biddingbidding;
 
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -13,6 +15,7 @@ public class BidderListAdapter extends ArrayAdapter<Bidder> implements
 		BidderListener {
 
 	private String priceFormat;
+	private static Handler sHandler = new Handler();
 
 	public BidderListAdapter(Context context) {
 		super(context, R.layout.bidder_layout, R.id.text_item);
@@ -63,7 +66,7 @@ public class BidderListAdapter extends ArrayAdapter<Bidder> implements
 		case LOST:
 			return getContext().getString(R.string.lost);
 		default:
-			throw new RuntimeException("Defects - wrong BidderState");
+			throw new RuntimeException("Defects - " + state.toString());
 		}
 	}
 
@@ -73,6 +76,17 @@ public class BidderListAdapter extends ArrayAdapter<Bidder> implements
 
 	@Override
 	public void bidderStateChanged(Bidder bidder) {
-		notifyDataSetChanged();
+		sHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				notifyDataSetChanged();
+			}
+		});
+	}
+
+	@Override
+	public void add(Bidder bidder) {
+		super.add(bidder);
+		bidder.addBidderListener(this);
 	}
 }

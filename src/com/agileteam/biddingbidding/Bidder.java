@@ -3,6 +3,8 @@ package com.agileteam.biddingbidding;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 public class Bidder implements AuctionEventListener {
 
 	private Auction auction;
@@ -17,30 +19,23 @@ public class Bidder implements AuctionEventListener {
 
 	@Override
 	public void auctionClosed() {
-		if(state == BidderState.WINNING ){
-			state = BidderState.WON;
-		}else if(state == BidderState.LOSING){
-			state = BidderState.LOST;
-		}else if(state == BidderState.BIDDING){
-			state = BidderState.LOST;
-		}else if(state == BidderState.JOINED){
-			state = BidderState.LOST;
-		}else {
-			throw new RuntimeException("Defect - Wrong BidderState");
+		if (state == BidderState.WINNING) {
+			setState(BidderState.WON);
+		} else {
+			setState(BidderState.LOST);
 		}
-		notifyChanged();
 	}
 
 	@Override
 	public void currentPrice(int price, int increment, PriceSource priceSource) {
+		Log.d("yskang", "currentPrice(" + price + ", " + increment + ", " + priceSource + ")");
 		this.currentPrice = price;
 		this.nextPrice = price + increment;
 		if (priceSource == PriceSource.FromSelf) {
-			this.state = BidderState.WINNING;
+			setState(BidderState.WINNING);
 		} else {
-			this.state = BidderState.LOSING;
+			setState(BidderState.LOSING);
 		}
-		notifyChanged();
 	}
 
 	public int getCurrentPrice() {
@@ -51,24 +46,25 @@ public class Bidder implements AuctionEventListener {
 		return nextPrice;
 	}
 
-	public void setState(BidderState state){
-		this.state = state; 
+	private void setState(BidderState state) {
+		Log.d("yskang", "setState(" + state + ")");
+		this.state = state;
 		notifyChanged();
 	}
-	
+
 	public BidderState getState() {
 		return state;
 	}
 
 	public void join() {
 		auction.join();
+		setState(BidderState.JOINED);
 	}
 
 	public void bid() {
 		auction.bid(nextPrice);
 		currentPrice = nextPrice;
-		state = BidderState.BIDDING;
-		notifyChanged();
+		setState(BidderState.BIDDING);
 	}
 
 	public void addBidderListener(BidderListener listener) {
