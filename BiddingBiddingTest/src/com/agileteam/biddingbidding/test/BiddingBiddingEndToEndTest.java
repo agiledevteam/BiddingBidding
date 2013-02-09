@@ -94,7 +94,12 @@ public class BiddingBiddingEndToEndTest extends
 		auction.announceClosed();
 		application.showsWon(2300, 2400);
 	}
-	
+
+	public void testFailToJoinIfServerIsNotStarted() throws Exception {
+		application.joinAuction();
+		application.showsFailedToJoin();
+	}
+
 	@Override
 	public void tearDown() throws Exception {
 		solo.finishOpenedActivities();

@@ -1,16 +1,15 @@
 package com.agileteam.biddingbidding.test;
 
 import static com.objogate.wl.android.driver.ViewDriver.allText;
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
 import android.app.Activity;
-import android.view.View;
 
 import com.agileteam.biddingbidding.R;
 import com.jayway.android.robotium.solo.Solo;
 import com.objogate.wl.android.driver.AndroidDriver;
 import com.objogate.wl.android.driver.ListViewDriver;
-import com.objogate.wl.android.driver.ViewDriver;
 
 public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 
@@ -47,5 +46,9 @@ public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 
 	public void bid() {
 		solo.clickOnButton(0);
+	}
+
+	public void showStatus(String string) {
+		assertTrue(solo.waitForText(string));
 	}
 }

@@ -56,4 +56,8 @@ public class ApplicationRunner {
 		}
 	}
 
+	public void showsFailedToJoin() {
+		driver.showStatus("Failed To Join");
+	}
+
 }
