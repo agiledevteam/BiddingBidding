@@ -1,0 +1,22 @@
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/accelerate_decelerate_interpolator">
+
+    <translate
+        android:duration="500"
+        android:fromYDelta="800%"
+        android:toYDelta="0" >
+    </translate>
+
+    <alpha
+        android:duration="500"
+        android:fromAlpha="0.5"
+        android:toAlpha="1.0" >
+    </alpha>
+
+    <rotate
+        android:duration="500"
+        android:fromDegrees="45"
+        android:toDegrees="0" >
+    </rotate>
+
+</set>

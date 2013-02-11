@@ -139,9 +139,9 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(JoinResult result) {
 			if (result.ok) {
-				bidderList.add(result.bidder);
 				loginView.setVisibility(View.GONE);
 				statusView.setVisibility(View.VISIBLE);
+				bidderList.add(result.bidder);
 			} else {
 				setStatus(result.message);
 				setLoginViewEnable(true);
