@@ -1,6 +1,6 @@
 package com.agileteam.biddingbidding.test;
 
-import static com.objogate.wl.android.driver.ViewDriver.allText;
+import static com.lge.android.wl.driver.ViewDriver.allText;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasItem;
@@ -8,8 +8,8 @@ import android.app.Activity;
 
 import com.agileteam.biddingbidding.R;
 import com.jayway.android.robotium.solo.Solo;
-import com.objogate.wl.android.driver.AndroidDriver;
-import com.objogate.wl.android.driver.ListViewDriver;
+import com.lge.android.wl.driver.AndroidDriver;
+import com.lge.android.wl.driver.ListViewDriver;
 
 public class BiddingBiddingDriver extends AndroidDriver<Activity> {
 

@@ -1,8 +1,8 @@
 package com.agileteam.biddingbidding.unittest;
 
-import static com.objogate.wl.android.driver.ViewDriver.enabled;
-import static com.objogate.wl.android.driver.ViewDriver.visible;
-import static com.objogate.wl.android.driver.ViewDriver.forcused;
+import static com.lge.android.wl.driver.ViewDriver.enabled;
+import static com.lge.android.wl.driver.ViewDriver.visible;
+import static com.lge.android.wl.driver.ViewDriver.forcused;
 import static org.hamcrest.CoreMatchers.not;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
@@ -16,7 +16,7 @@ import com.agileteam.biddingbidding.test.ApplicationRunner;
 import com.agileteam.biddingbidding.test.BiddingBiddingDriver;
 import com.agileteam.biddingbidding.test.FakeAuctionServer;
 import com.jayway.android.robotium.solo.Solo;
-import com.objogate.wl.android.driver.ViewDriver;
+import com.lge.android.wl.driver.ViewDriver;
 
 public class ActivityUITest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
