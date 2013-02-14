@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.Roster;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -24,10 +25,19 @@ public class XMPPAuction implements Auction, AuctionEventListener {
 	public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/"
 			+ AUCTION_RESOURCE;
 
-	public XMPPAuction(XMPPConnection connection, String itemId) {
+	public XMPPAuction(final XMPPConnection connection, String itemId) {
 		chat = connection.getChatManager().createChat(
 				auctionId(itemId, connection),
 				new AuctionMessageTranslator(getId(connection), this));
+		connection.getChatManager().addChatListener(new ChatManagerListener() {
+
+			@Override
+			public void chatCreated(Chat chat, boolean arg1) {
+				Log.d("han", "chat created with: " + chat.getParticipant());
+				chat.addMessageListener(new AuctionMessageTranslator(
+						getId(connection), XMPPAuction.this));
+			}
+		});
 	}
 
 	private String auctionId(String itemId, XMPPConnection connection) {
