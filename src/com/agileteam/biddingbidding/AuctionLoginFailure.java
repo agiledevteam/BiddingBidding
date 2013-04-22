@@ -1,10 +1,9 @@
 package com.agileteam.biddingbidding;
 
-import org.jivesoftware.smack.XMPPException;
 
 public class AuctionLoginFailure extends Exception {
 
-	public AuctionLoginFailure(XMPPException e) {
+	public AuctionLoginFailure(Exception e) {
 		super(e);
 	}
 

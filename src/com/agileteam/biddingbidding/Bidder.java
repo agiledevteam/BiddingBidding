@@ -56,9 +56,9 @@ public class Bidder implements AuctionEventListener {
 		return state;
 	}
 
-	public void join() {
+	public void join() throws AuctionIsNotAvailable {
 		auction.join();
-		setState(BidderState.JOINED);
+		setState(BidderState.LOSING);
 	}
 
 	public void bid() {
@@ -82,6 +82,6 @@ public class Bidder implements AuctionEventListener {
 	}
 
 	public String getItemDescription() {
-		return "임베디드 TDD를 위한 C";
+		return "임베디드 C를 위한 TDD";
 	}
 }
