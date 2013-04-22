@@ -126,6 +126,7 @@ public class MainActivity extends Activity {
 			try {
 				XMPPAuctionHouse house = XMPPAuctionHouse.login(params[0], params[1], params[2]);
 				Bidder bidder = join(house, AUCTION_ITEM_ID);
+				
 				return JoinResult.ok(bidder);
 			} catch (AuctionIsNotAvailable e) {
 				return JoinResult.failed(getString(R.string.failed_to_join));

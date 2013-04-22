@@ -2,13 +2,15 @@ package com.agileteam.biddingbidding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManagerListener;
-import org.jivesoftware.smack.Roster;
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
-import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Message;
 
 import android.util.Log;
 
@@ -24,11 +26,10 @@ public class XMPPAuction implements Auction, AuctionEventListener {
 	public static final String ITEM_ID_AS_LOGIN = "auction-%s";
 	public static final String AUCTION_ID_FORMAT = ITEM_ID_AS_LOGIN + "@%s/"
 			+ AUCTION_RESOURCE;
+	private final String itemId;
 
 	public XMPPAuction(final XMPPConnection connection, String itemId) {
-		chat = connection.getChatManager().createChat(
-				auctionId(itemId, connection),
-				new AuctionMessageTranslator(getId(connection), this));
+		this.itemId = itemId;
 		connection.getChatManager().addChatListener(new ChatManagerListener() {
 
 			@Override
@@ -38,6 +39,8 @@ public class XMPPAuction implements Auction, AuctionEventListener {
 						getId(connection), XMPPAuction.this));
 			}
 		});
+		chat = connection.getChatManager().createChat(
+				auctionId(itemId, connection), null);
 	}
 
 	private String auctionId(String itemId, XMPPConnection connection) {
@@ -65,11 +68,23 @@ public class XMPPAuction implements Auction, AuctionEventListener {
 	}
 
 	@Override
-	public void join() {
+	public void join() throws AuctionIsNotAvailable {
+		final CountDownLatch joined = new CountDownLatch(1);
+		MessageListener listener = new MessageListener() {
+			@Override
+			public void processMessage(Chat arg0, Message arg1) {
+				joined.countDown();
+			}
+		};
+		chat.addMessageListener(listener);
 		try {
 			chat.sendMessage(XMPPAuction.JOIN_COMMAND_FORMAT);
-		} catch (XMPPException e) {
+			if (!joined.await(2, TimeUnit.SECONDS)) {
+				throw new AuctionIsNotAvailable(itemId);
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new AuctionIsNotAvailable(itemId);
 		}
 	}
 
