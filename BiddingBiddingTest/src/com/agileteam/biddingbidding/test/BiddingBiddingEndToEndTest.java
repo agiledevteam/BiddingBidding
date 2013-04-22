@@ -26,16 +26,18 @@ public class BiddingBiddingEndToEndTest extends
 	public void testSingleJoinLostWithoutBidding() throws Exception {
 		auction.startSellingItem();
 		application.joinAuction();
-		application.showsJoined();
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
+
+		auction.reportPrice(2000, 100, "Other Bidder");
+		application.showsLosing(2100, 2000);
+		
 		auction.announceClosed();
-		application.showsLost(0, 0);
+		application.showsLost(2000, 2000);
 	}
 
 	public void testSingleJoinBiddingButLost() throws Exception {
 		auction.startSellingItem();
 		application.joinAuction();
-		application.showsJoined();
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 
 		auction.reportPrice(2000, 100, "Other bidder");
@@ -52,7 +54,6 @@ public class BiddingBiddingEndToEndTest extends
 	public void testSingleJoinBiddingWinningWon() throws Exception {
 		auction.startSellingItem();
 		application.joinAuction();
-		application.showsJoined();
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 
 		auction.reportPrice(2000, 100, "Other bidder");
@@ -71,7 +72,6 @@ public class BiddingBiddingEndToEndTest extends
 	public void testSingleJoinBiddingWinningLosingWiningWOn() throws Exception {
 		auction.startSellingItem();
 		application.joinAuction();
-		application.showsJoined();
 		auction.hasReceivedJoinRequestFrom(ApplicationRunner.BIDDER_ID);
 
 		auction.reportPrice(2000, 100, "Other bidder");
