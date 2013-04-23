@@ -12,6 +12,7 @@ public class Bidder implements AuctionEventListener {
 	private int currentPrice;
 	private int nextPrice;
 	private BidderState state = BidderState.JOINING;
+	private int bidderImage;
 
 	public Bidder(Auction auction) {
 		this.auction = auction;
@@ -82,6 +83,14 @@ public class Bidder implements AuctionEventListener {
 	}
 
 	public String getItemDescription() {
-		return "임베디드 C를 위한 TDD";
+		return "TDD for the Embedded C";
+	}
+
+	public int getIdImage() {
+		return bidderImage;
+	}
+	
+	public void setIdImage(int bidderImage){
+		this.bidderImage = bidderImage;
 	}
 }

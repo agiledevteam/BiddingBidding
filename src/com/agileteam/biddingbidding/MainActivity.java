@@ -1,5 +1,7 @@
 package com.agileteam.biddingbidding;
 
+import java.util.Locale;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,13 +26,13 @@ public class MainActivity extends Activity {
 
 	private EditText editTextHost;
 	private EditText editTextId;
-	private ImageView bidderImageView;
 	
 	private ListView listView;
 	private BidderListAdapter bidderList;
 
 	private String hostItems[] = new String[2];
 	private String idItems[] = new String[16];
+	private int idImages[] = new int[16];
 	private int hostSelect = 0;
 	private int idSelect = 0;
 	
@@ -59,8 +61,6 @@ public class MainActivity extends Activity {
 		editTextHost = (EditText) findViewById(R.id.editText_host);
 		editTextId = (EditText) findViewById(R.id.editText_id);
 		
-		bidderImageView = (ImageView) findViewById(R.id.image_bidder);
-		
 		bidderList = new BidderListAdapter(this);
 		listView.setAdapter(bidderList);
 
@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
 				login();
 			}
 		});
-		
+
 		final Button buttonHostSelect = (Button) findViewById(R.id.button_host_select);
 		buttonHostSelect.setOnClickListener(new OnClickListener(){
 
@@ -115,6 +115,24 @@ public class MainActivity extends Activity {
 		idItems[13] = getResources().getString(R.string.id_snake);
 		idItems[14] = getResources().getString(R.string.id_wolf);
 		idItems[15] = getResources().getString(R.string.id_zebra);
+		
+		idImages[0] = R.raw.alligator;
+		idImages[1] = R.raw.buffalo;
+		idImages[2] = R.raw.cheetah;
+		idImages[3] = R.raw.deer;
+		idImages[4] = R.raw.elephant;
+		idImages[5] = R.raw.frog;
+		idImages[6] = R.raw.gorilla;
+		idImages[7] = R.raw.hippo;
+		idImages[8] = R.raw.koala;
+		idImages[9] = R.raw.lion;
+		idImages[10] = R.raw.moose;
+		idImages[11] = R.raw.panda;
+		idImages[12] = R.raw.raccoon;
+		idImages[13] = R.raw.snake;
+		idImages[14] = R.raw.wolf;
+		idImages[15] = R.raw.zebra;
+		
 	}
 
 	private void DialogSelectHost() {
@@ -158,8 +176,7 @@ public class MainActivity extends Activity {
 		})
 		.setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				editTextId.setText(idItems[getIdSelect()]);
-				//bidderImageView.setImageResource(R.raw.alligator);
+				editTextId.setText(idItems[getIdSelect()].toLowerCase(Locale.US));
 			}
 		})
 		.setNegativeButton(R.string.cancel,
@@ -171,7 +188,6 @@ public class MainActivity extends Activity {
 		});
 		alertDialogBuilder.show();
 	}
-	
 	
 	protected int getIdSelect() {
 		return idSelect;
@@ -220,6 +236,7 @@ public class MainActivity extends Activity {
 		bidder.addBidderListener(new UIThreadBidderListener(
 				new BidderDisplayer()));
 		bidder.join();
+		bidder.setIdImage(idImages[idSelect]);
 		return bidder;
 	}
 

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp" >
+    android:layout_height="wrap_content" >
 
     <TextView
         android:layout_width="match_parent"
@@ -18,15 +17,14 @@
         android:background="@raw/shadow" />
 
 <RelativeLayout
-            android:id="@+id/inner_frame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#fff"
-            android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-            android:padding="10dp" >
+    android:id="@+id/inner_frame"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="20dp"
+    android:background="#fff"
+    android:padding="10dp" >
 
             <ImageView
                 android:id="@+id/image_item"
@@ -73,6 +71,7 @@
                 android:textColor="#f77" />
 
         </RelativeLayout>
+
     <ImageView
         android:id="@+id/image_bidder"
         android:layout_width="wrap_content"
@@ -82,6 +81,7 @@
         android:layout_marginRight="40dp"
         android:maxHeight="30dp"
         android:maxWidth="30dp"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>

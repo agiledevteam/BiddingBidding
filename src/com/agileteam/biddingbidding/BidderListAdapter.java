@@ -32,6 +32,9 @@ public class BidderListAdapter extends ArrayAdapter<Bidder> implements
 		// ImageView imageItem = (ImageView) view.findViewById(R.id.image_item);
 		TextView textPrice = (TextView) view.findViewById(R.id.text_price);
 		textPrice.setText(formatPrice(bidder.getCurrentPrice()));
+		
+		ImageView imageBidder = (ImageView) view.findViewById(R.id.image_bidder);
+		imageBidder.setImageResource(bidder.getIdImage());
 
 		Button buttonBid = (Button) view.findViewById(R.id.button_bid);
 		if (bidder.getState() == BidderState.LOSING) {
