@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,12 +23,16 @@ public class MainActivity extends Activity {
 	private View statusView;
 
 	private EditText editTextHost;
+	private EditText editTextId;
+	private ImageView bidderImageView;
 	
 	private ListView listView;
 	private BidderListAdapter bidderList;
 
 	private String hostItems[] = new String[2];
+	private String idItems[] = new String[16];
 	private int hostSelect = 0;
+	private int idSelect = 0;
 	
 	private class BidderDisplayer implements BidderListener {
 		@Override
@@ -52,7 +57,9 @@ public class MainActivity extends Activity {
 		listView = (ListView) findViewById(R.id.list);
 
 		editTextHost = (EditText) findViewById(R.id.editText_host);
+		editTextId = (EditText) findViewById(R.id.editText_id);
 		
+		bidderImageView = (ImageView) findViewById(R.id.image_bidder);
 		
 		bidderList = new BidderListAdapter(this);
 		listView.setAdapter(bidderList);
@@ -72,7 +79,17 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				DialogSelectOption();
+				DialogSelectHost();
+			}
+			
+		});
+
+		final Button buttonIdSelect = (Button) findViewById(R.id.button_id_select);
+		buttonIdSelect.setOnClickListener(new OnClickListener(){
+			
+			@Override
+			public void onClick(View v) {
+				DialogSelectId();
 			}
 			
 		});
@@ -81,9 +98,27 @@ public class MainActivity extends Activity {
 	private void initItems() {
 		hostItems[0] = getResources().getString(R.string.prefixedlocalhost);
 		hostItems[1] = getResources().getString(R.string.prefixedhost);
+		
+		idItems[0] = getResources().getString(R.string.id_alligator);
+		idItems[1] = getResources().getString(R.string.id_buffalo);
+		idItems[2] = getResources().getString(R.string.id_cheetah);
+		idItems[3] = getResources().getString(R.string.id_deer);
+		idItems[4] = getResources().getString(R.string.id_elephant);
+		idItems[5] = getResources().getString(R.string.id_frog);
+		idItems[6] = getResources().getString(R.string.id_gorilla);
+		idItems[7] = getResources().getString(R.string.id_hippo);
+		idItems[8] = getResources().getString(R.string.id_koala);
+		idItems[9] = getResources().getString(R.string.id_lion);
+		idItems[10] = getResources().getString(R.string.id_moose);
+		idItems[11] = getResources().getString(R.string.id_panda);
+		idItems[12] = getResources().getString(R.string.id_raccoon);
+		idItems[13] = getResources().getString(R.string.id_snake);
+		idItems[14] = getResources().getString(R.string.id_wolf);
+		idItems[15] = getResources().getString(R.string.id_zebra);
 	}
 
-	private void DialogSelectOption() {
+	private void DialogSelectHost() {
+		setHostSelect(0);
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle(R.string.host_select_dialog_title);
 		alertDialogBuilder
@@ -109,7 +144,43 @@ public class MainActivity extends Activity {
 		alertDialogBuilder.show();
 	}
 	
+	private void DialogSelectId() {
+		setIdSelect(0);
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle(R.string.id_select_dialog_title);
+		alertDialogBuilder
+		.setSingleChoiceItems(idItems, 0,
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,
+					int whichButton) {
+				setIdSelect(whichButton);
+			}
+		})
+		.setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				editTextId.setText(idItems[getIdSelect()]);
+				//bidderImageView.setImageResource(R.raw.alligator);
+			}
+		})
+		.setNegativeButton(R.string.cancel,
+				new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,
+					int whichButton) {
+				setIdSelect(0);
+			}
+		});
+		alertDialogBuilder.show();
+	}
 	
+	
+	protected int getIdSelect() {
+		return idSelect;
+	}
+
+	protected void setIdSelect(int whichButton) {
+		idSelect = whichButton;
+	}
+
 	protected int getHostSelect() {
 		return hostSelect;
 	}

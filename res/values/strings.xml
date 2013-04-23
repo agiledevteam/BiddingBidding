@@ -24,7 +24,24 @@
     <string name="prefixedlocalhost">localhost</string>
     <string name="select_button">Pick</string>
     <string name="host_select_dialog_title">Select Host</string>
+    <string name="id_select_dialog_title">Select ID</string>
     <string name="select">Select</string>
     <string name="cancel">Cancel</string>
+    <string name="id_alligator">Alligator</string>
+    <string name="id_buffalo">Buffalo</string>
+    <string name="id_cheetah">Cheetah</string>
+    <string name="id_deer">Deer</string>
+    <string name="id_elephant">Elephant</string>
+    <string name="id_frog">Frog</string>
+    <string name="id_gorilla">Gorilla</string>
+    <string name="id_hippo">Hippo</string>
+    <string name="id_koala">Koala</string>
+    <string name="id_lion">Lion</string>
+    <string name="id_moose">Moose</string>
+    <string name="id_panda">Panda</string>
+    <string name="id_raccoon">Raccoon</string>
+    <string name="id_snake">Snake</string>
+    <string name="id_wolf">Wolf</string>
+    <string name="id_zebra">Zebra</string>
 
 </resources>
