@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
 		loginView = findViewById(R.id.layout_login);
 		statusView = findViewById(R.id.status);
 		listView = (ListView) findViewById(R.id.list);
+		
 		bidderList = new BidderListAdapter(this);
 		listView.setAdapter(bidderList);
 

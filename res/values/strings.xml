@@ -20,5 +20,7 @@
     <string name="failed_to_join">Failed To Join</string>
     <string name="failed_to_login">Failed To Login</string>
     <string name="price_format">₩ %,d</string>
+    <string name="prefixedhost">54.249.240.6</string>
+    <string name="select_button">Pick</string>
 
 </resources>
