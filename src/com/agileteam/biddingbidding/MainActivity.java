@@ -1,6 +1,8 @@
 package com.agileteam.biddingbidding;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,9 +21,14 @@ public class MainActivity extends Activity {
 	private View loginView;
 	private View statusView;
 
+	private EditText editTextHost;
+	
 	private ListView listView;
 	private BidderListAdapter bidderList;
 
+	private String hostItems[] = new String[2];
+	private int hostSelect = 0;
+	
 	private class BidderDisplayer implements BidderListener {
 		@Override
 		public void bidderStateChanged(Bidder bidder) {
@@ -32,6 +39,9 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		initItems();
+				
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_main);
 
@@ -40,6 +50,9 @@ public class MainActivity extends Activity {
 		loginView = findViewById(R.id.layout_login);
 		statusView = findViewById(R.id.status);
 		listView = (ListView) findViewById(R.id.list);
+
+		editTextHost = (EditText) findViewById(R.id.editText_host);
+		
 		
 		bidderList = new BidderListAdapter(this);
 		listView.setAdapter(bidderList);
@@ -53,6 +66,56 @@ public class MainActivity extends Activity {
 				login();
 			}
 		});
+		
+		final Button buttonHostSelect = (Button) findViewById(R.id.button_host_select);
+		buttonHostSelect.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				DialogSelectOption();
+			}
+			
+		});
+	}
+
+	private void initItems() {
+		hostItems[0] = getResources().getString(R.string.prefixedlocalhost);
+		hostItems[1] = getResources().getString(R.string.prefixedhost);
+	}
+
+	private void DialogSelectOption() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle(R.string.host_select_dialog_title);
+		alertDialogBuilder
+				.setSingleChoiceItems(hostItems, 0,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								setHostSelect(whichButton);
+							}
+						})
+				.setPositiveButton(R.string.select, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						editTextHost.setText(hostItems[getHostSelect()]);
+					}
+				})
+				.setNegativeButton(R.string.cancel,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								setHostSelect(0);
+							}
+						});
+		alertDialogBuilder.show();
+	}
+	
+	
+	protected int getHostSelect() {
+		return hostSelect;
+	}
+
+	protected void setHostSelect(int whichButton) {
+		hostSelect  = whichButton;
 	}
 
 	private String host() {

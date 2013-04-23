@@ -21,6 +21,10 @@
     <string name="failed_to_login">Failed To Login</string>
     <string name="price_format">₩ %,d</string>
     <string name="prefixedhost">54.249.240.6</string>
+    <string name="prefixedlocalhost">localhost</string>
     <string name="select_button">Pick</string>
+    <string name="host_select_dialog_title">Select Host</string>
+    <string name="select">Select</string>
+    <string name="cancel">Cancel</string>
 
 </resources>
